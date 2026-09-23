@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { GrowthAction, saveGrowthAction } from "@/lib/growth-store";
 
 interface Challenge {
   name: string;
@@ -9,21 +10,14 @@ interface Challenge {
   timeline: string;
 }
 
-interface Action {
-  name: string;
-  description: string;
-  definitionOfDone: string;
-  status: "active" | "complete";
-}
-
 const timelineOptions = ["1 week", "2 weeks", "1 month", "Custom timeline"];
 
 export default function ChallengePage() {
   const [actionName, setActionName] = useState("");
   const [actionDescription, setActionDescription] = useState("");
   const [definitionOfDone, setDefinitionOfDone] = useState("");
-  const [actionStatus, setActionStatus] = useState<Action["status"]>("active");
-  const [activeAction, setActiveAction] = useState<Action | null>(null);
+  const [actionStatus, setActionStatus] = useState<GrowthAction["status"]>("active");
+  const [activeAction, setActiveAction] = useState<GrowthAction | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [milestones, setMilestones] = useState(["", ""]);
@@ -52,12 +46,18 @@ export default function ChallengePage() {
 
   const handleActionSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setActiveAction({
+    const action: GrowthAction = {
+      id: `action-${Date.now()}`,
+      childId: "kid-101",
       name: actionName.trim(),
       description: actionDescription.trim(),
       definitionOfDone: definitionOfDone.trim(),
       status: actionStatus,
-    });
+      progress: "assigned",
+      createdAt: new Date().toISOString(),
+    };
+    saveGrowthAction(action);
+    setActiveAction(action);
   };
 
   return (

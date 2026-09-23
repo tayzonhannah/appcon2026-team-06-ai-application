@@ -1,4 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { useSyncExternalStore } from "react";
+import {
+  readGrowthActions,
+  submitGrowthAction,
+  subscribeToGrowthActions,
+} from "@/lib/growth-store";
 
 const missions = [
   {
@@ -25,6 +33,12 @@ const missions = [
 ];
 
 export default function KidHomePage() {
+  const actions = useSyncExternalStore(
+    subscribeToGrowthActions,
+    readGrowthActions,
+    () => [],
+  ).filter((action) => action.childId === "kid-101" && action.status === "active");
+
   return (
     <div className="my-auto space-y-6">
       <section className="grid gap-5 lg:grid-cols-[1.25fr_0.75fr]">
@@ -91,6 +105,41 @@ export default function KidHomePage() {
             </Link>
           ))}
         </div>
+      </section>
+
+      <section>
+        <div className="mb-3">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#2563EB]">From your parent</p>
+          <h2 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">Offline actions</h2>
+        </div>
+        {actions.length === 0 ? (
+          <div className="rounded-[20px] border-4 border-dashed border-[#0F172A]/30 bg-white/70 p-6 text-sm font-bold text-[#475569]">
+            No new actions yet. Check back when your parent adds one.
+          </div>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2">
+            {actions.map((action) => (
+              <article key={action.id} className="rounded-[20px] border-4 border-[#0F172A] bg-white p-5 shadow-[0_5px_0_#0F172A]">
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="text-xl font-black leading-tight">{action.name}</h3>
+                  <span className="shrink-0 rounded-lg border-2 border-[#0F172A] bg-[#D0E6FD] px-2 py-1 text-[10px] font-black uppercase">Assigned</span>
+                </div>
+                <p className="mt-3 text-sm font-bold leading-relaxed text-[#475569]">{action.description}</p>
+                <div className="mt-4 rounded-xl border-2 border-[#0F172A]/20 bg-[#EFF6FF] p-3">
+                  <p className="text-[10px] font-black uppercase tracking-wider text-[#475569]">How you finish it</p>
+                  <p className="mt-1 text-sm font-black">{action.definitionOfDone}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => submitGrowthAction(action.id)}
+                  className="mt-4 w-full rounded-xl border-2 border-[#0F172A] bg-[#EC4899] px-4 py-3 text-xs font-black uppercase tracking-wider text-white shadow-[0_3px_0_#0F172A] transition hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-[#EC4899]/30"
+                >
+                  Submit for parent review
+                </button>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
 
       <section className="flex flex-col items-start justify-between gap-4 rounded-[20px] border-4 border-[#0F172A] bg-[#F59E0B] p-5 shadow-[0_5px_0_#0F172A] sm:flex-row sm:items-center">

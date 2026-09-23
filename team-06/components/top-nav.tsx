@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 "use client";
 
 import Link from "next/link";
@@ -142,6 +141,3 @@ export function TopNav() {
     </header>
   );
 }
-=======
-export { SideNav as TopNav, SideNav } from "./side-nav";
->>>>>>> origin/main
