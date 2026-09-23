@@ -9,15 +9,15 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "The Conscious Future - Build Emotional Intelligence & Resilience",
+  title: "Kith - Build Emotional Intelligence & Resilience",
   description: "An AI-assisted, gamified app helping children build emotional intelligence and offline resilience.",
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  themeColor: "#F1E4D1",
+  viewportFit: "cover",
+  themeColor: "#EFF6FF",
 };
 
 export default function RootLayout({

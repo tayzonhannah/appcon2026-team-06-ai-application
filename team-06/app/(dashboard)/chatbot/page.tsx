@@ -147,7 +147,7 @@ const RESPONSES: { intro: string; resources: Resource[] }[] = [
         title: "Token Economy (This App!)",
         type: "activity",
         description:
-          "Use The Conscious Future's Challenge system — your child earns screen-time tokens by completing offline actions. This builds intrinsic motivation to limit screens.",
+          "Use Kith's Challenge system — your child earns screen-time by completing offline actions. This builds intrinsic motivation to limit screens.",
       },
     ],
   },
