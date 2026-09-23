@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authenticateParent } from "@/lib/auth/auth-service";
+import { PROFILE_COMPLETION_KEY } from "@/lib/constants/profile";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -30,7 +31,8 @@ export default function LoginPage() {
     setIsLoading(false);
 
     if (result.success && result.redirectTo) {
-      router.push(result.redirectTo);
+      const hasCompletedProfile = window.localStorage.getItem(PROFILE_COMPLETION_KEY) === "true";
+      router.push(hasCompletedProfile ? result.redirectTo : "/assessment");
     } else {
       setErrorMessage(result.error || "Authentication failed.");
     }
@@ -162,7 +164,7 @@ export default function LoginPage() {
           {authMode === "login" ? (
             <div className="flex flex-col gap-2">
               <span className="text-center text-[11px] font-black text-[#162660]/80 uppercase tracking-wider mb-0.5">
-                Don't have an account? Sign up:
+                        Don&apos;t have an account? Sign up:
               </span>
 
               <button

@@ -47,6 +47,16 @@ export function TopNav() {
       ),
     },
     {
+      label: "Profile",
+      href: "/profile",
+      icon: (
+        <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="3" strokeWidth="2.2" />
+          <path strokeLinecap="round" strokeWidth="2.2" d="M5 20a7 7 0 0114 0" />
+        </svg>
+      ),
+    },
+    {
       label: "Settings",
       href: "/settings",
       icon: (

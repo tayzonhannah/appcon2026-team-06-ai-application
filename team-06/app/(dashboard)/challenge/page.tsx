@@ -9,9 +9,21 @@ interface Challenge {
   timeline: string;
 }
 
+interface Action {
+  name: string;
+  description: string;
+  definitionOfDone: string;
+  status: "active" | "complete";
+}
+
 const timelineOptions = ["1 week", "2 weeks", "1 month", "Custom timeline"];
 
 export default function ChallengePage() {
+  const [actionName, setActionName] = useState("");
+  const [actionDescription, setActionDescription] = useState("");
+  const [definitionOfDone, setDefinitionOfDone] = useState("");
+  const [actionStatus, setActionStatus] = useState<Action["status"]>("active");
+  const [activeAction, setActiveAction] = useState<Action | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [milestones, setMilestones] = useState(["", ""]);
@@ -38,8 +50,75 @@ export default function ChallengePage() {
     });
   };
 
+  const handleActionSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setActiveAction({
+      name: actionName.trim(),
+      description: actionDescription.trim(),
+      definitionOfDone: definitionOfDone.trim(),
+      status: actionStatus,
+    });
+  };
+
   return (
     <div className="flex flex-col gap-6 py-6">
+      <section className="flex flex-col gap-4 border-b-2 border-[#4A3B2C]/20 pb-6">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#162660]/60">Offline action</p>
+          <h2 className="mt-1 text-2xl font-black tracking-tight text-[#162660]">Choose an action</h2>
+          <p className="mt-1 text-sm font-bold text-[#162660]/70">Define one small thing your kid can practice today.</p>
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)]">
+          <form onSubmit={handleActionSubmit} className="aralkada-card flex flex-col gap-4 p-5 sm:p-6">
+            <div>
+              <label htmlFor="action-name" className="mb-1.5 block text-xs font-black uppercase tracking-wider text-[#162660]">Action name</label>
+              <input id="action-name" required value={actionName} onChange={(event) => setActionName(event.target.value)} placeholder="Pack away devices before dinner" className="aralkada-input w-full px-4 py-3 text-sm" />
+            </div>
+
+            <div>
+              <label htmlFor="action-description" className="mb-1.5 block text-xs font-black uppercase tracking-wider text-[#162660]">Action description</label>
+              <textarea id="action-description" required value={actionDescription} onChange={(event) => setActionDescription(event.target.value)} placeholder="What should your kid do?" rows={3} className="aralkada-input w-full resize-y px-4 py-3 text-sm" />
+            </div>
+
+            <div>
+              <label htmlFor="definition-of-done" className="mb-1.5 block text-xs font-black uppercase tracking-wider text-[#162660]">Definition of done</label>
+              <input id="definition-of-done" required value={definitionOfDone} onChange={(event) => setDefinitionOfDone(event.target.value)} placeholder="Devices are in the charging basket by 6 PM" className="aralkada-input w-full px-4 py-3 text-sm" />
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setActionStatus((status) => status === "active" ? "complete" : "active")}
+              className={`w-full rounded-xl border-2 border-[#4A3B2C] px-4 py-3 text-sm font-black uppercase tracking-wider shadow-[0_3px_0_#4A3B2C] transition hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#162660] ${actionStatus === "active" ? "bg-[#D0E6FD] text-[#162660]" : "bg-[#B7E4C7] text-[#162660]"}`}
+              aria-pressed={actionStatus === "complete"}
+            >
+              Status: {actionStatus === "active" ? "Active" : "Complete"}
+            </button>
+
+            <button type="submit" className="aralkada-btn-primary mt-1 flex w-full items-center justify-center gap-2 py-3 text-sm">Save action</button>
+          </form>
+
+          <aside className="aralkada-card-beige h-fit p-5 sm:p-6">
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#162660]/60">Currently active</p>
+            {activeAction ? (
+              <div className="mt-3">
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="text-xl font-black text-[#162660]">{activeAction.name}</h3>
+                  <span className="rounded-full border-2 border-[#4A3B2C] bg-[#D0E6FD] px-2 py-1 text-[10px] font-black uppercase text-[#162660]">{activeAction.status}</span>
+                </div>
+                <p className="mt-2 text-sm font-bold leading-relaxed text-[#162660]/75">{activeAction.description}</p>
+                <div className="mt-4 rounded-xl border-2 border-[#4A3B2C]/30 bg-white p-3">
+                  <p className="text-[10px] font-black uppercase tracking-wider text-[#162660]/60">Definition of done</p>
+                  <p className="mt-1 text-sm font-bold text-[#162660]">{activeAction.definitionOfDone}</p>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-4 rounded-xl border-2 border-dashed border-[#4A3B2C]/40 bg-white/60 p-5 text-sm font-bold leading-relaxed text-[#162660]/65">Your active action will appear here after you save it.</div>
+            )}
+          </aside>
+        </div>
+      </section>
+
       <div className="flex flex-col gap-2 border-b-2 border-[#4A3B2C]/20 pb-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#162660]/60">Offline skill building</p>
