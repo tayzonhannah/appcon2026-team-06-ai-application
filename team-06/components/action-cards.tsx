@@ -4,7 +4,7 @@ export function ActionCards() {
   return (
     <div className="flex flex-col gap-4 h-full">
       {/* Option 1: Chatbot (Mascot) Card */}
-      <div className="aralkada-card p-4 flex flex-col justify-between flex-1">
+      <div className="aralkada-card p-4 flex flex-col flex-1">
         <div>
           <div className="flex items-center justify-between mb-3">
             <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#D0E6FD] border-2 border-[#4A3B2C] shadow-[0_2px_0_#4A3B2C] text-[10px] font-black text-[#162660] uppercase tracking-wider">
@@ -33,8 +33,8 @@ export function ActionCards() {
         </div>
 
         <Link
-          href="/dashboard/chatbot"
-          className="w-full py-3 aralkada-btn-primary flex items-center justify-center gap-2 text-center text-sm cursor-pointer"
+          href="/chatbot"
+          className="mt-auto w-full py-3 aralkada-btn-primary flex items-center justify-center gap-2 text-center text-sm cursor-pointer"
         >
           <svg className="w-4 h-4 text-[#F1E4D1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -49,7 +49,7 @@ export function ActionCards() {
       </div>
 
       {/* Option 2: Make Action / Challenge Card */}
-      <div className="aralkada-card p-4 flex flex-col justify-between flex-1">
+      <div className="aralkada-card p-4 flex flex-col flex-1">
         <div>
           <div className="flex items-center justify-between mb-3">
             <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#E8DAC4] border-2 border-[#4A3B2C] shadow-[0_2px_0_#4A3B2C] text-[10px] font-black text-[#162660] uppercase tracking-wider">
@@ -84,8 +84,8 @@ export function ActionCards() {
         </div>
 
         <Link
-          href="/dashboard/challenge"
-          className="w-full py-3 aralkada-btn-secondary flex items-center justify-center gap-2 text-center text-sm cursor-pointer"
+          href="/challenge"
+          className="mt-auto w-full py-3 aralkada-btn-secondary flex items-center justify-center gap-2 text-center text-sm cursor-pointer"
         >
           <svg className="w-4 h-4 text-[#162660]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 4v16m8-8H4" />

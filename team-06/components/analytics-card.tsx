@@ -29,7 +29,7 @@ export function AnalyticsCard({ data }: AnalyticsCardProps) {
       </div>
 
       {/* Metrics Section: Actions & Challenges */}
-      <div className="flex flex-col gap-3 flex-1">
+      <div className="flex flex-col justify-between flex-1">
         {/* Actions Box */}
         <div className="rounded-2xl border-2 border-[#4A3B2C] bg-[#F8F1E5] p-3 shadow-[0_3px_0_#4A3B2C]">
           <div className="flex items-center justify-between mb-2">

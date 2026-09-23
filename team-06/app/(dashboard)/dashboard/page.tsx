@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { AnalyticsCard } from "@/components/dashboard/analytics-card";
-import { ActionCards } from "@/components/dashboard/action-cards";
-import { ChildDropdown } from "@/components/dashboard/child-dropdown";
+import { AnalyticsCard } from "@/components/analytics-card";
+import { ActionCards } from "@/components/action-cards";
+import { ChildDropdown } from "@/components/child-dropdown";
 import { MOCK_CHILDREN_LIST } from "@/lib/constants/analytics";
 
 export default function DashboardPage() {

@@ -23,7 +23,7 @@ export function TopNav() {
     },
     {
       label: "Challenge",
-      href: "/dashboard/challenge",
+      href: "/challenge",
       icon: (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="10" strokeWidth="2.2" />
@@ -34,7 +34,7 @@ export function TopNav() {
     },
     {
       label: "Chatbot",
-      href: "/dashboard/chatbot",
+      href: "/chatbot",
       icon: (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -48,7 +48,7 @@ export function TopNav() {
     },
     {
       label: "Settings",
-      href: "/dashboard/settings",
+      href: "/settings",
       icon: (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -122,7 +122,7 @@ export function TopNav() {
           </div>
 
           <Link
-            href="/"
+            href="/login"
             className="flex items-center justify-center px-3 py-2 rounded-xl bg-white text-[#162660] border-2 border-[#4A3B2C] shadow-[0_2px_0_#4A3B2C] hover:bg-[#F1E4D1] text-xs font-black uppercase tracking-wider transition-all h-9"
           >
             Logout
