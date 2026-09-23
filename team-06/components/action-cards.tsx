@@ -3,12 +3,12 @@ import Link from "next/link";
 export function ActionCards() {
   return (
     <div className="flex flex-col gap-4 justify-between h-full">
-      {/* Option 1: Chatbot (Mascot) Card */}
+      {/* Option 1: Chatbot Card */}
       <div className="aralkada-card p-4 flex flex-col justify-between">
         <div>
           <div className="flex items-center justify-between mb-2.5">
             <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#D0E6FD] border-2 border-[#4A3B2C] shadow-[0_2px_0_#4A3B2C] text-[10px] font-black text-[#162660] uppercase tracking-wider">
-              Parent AI Mascot
+              Chatbot
             </span>
           </div>
 
@@ -39,7 +39,7 @@ export function ActionCards() {
               d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
             />
           </svg>
-          <span>CHAT WITH MASCOT</span>
+          <span>CHAT WITH CHATBOT</span>
         </Link>
       </div>
 

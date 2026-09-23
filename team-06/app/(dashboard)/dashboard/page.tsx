@@ -167,17 +167,17 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* ── BENTO TILE 3: Parent AI Mascot (lg:col-span-6) ── */}
+        {/* ── BENTO TILE 3: Chatbot (lg:col-span-6) ── */}
         <div className="lg:col-span-6 aralkada-card p-5 flex flex-col justify-between gap-4">
           <div>
             <div className="flex items-center justify-between mb-2.5">
               <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#D0E6FD] border-2 border-[#162660] shadow-[0_2px_0_#162660] text-[9px] font-black text-[#162660] uppercase tracking-wider">
-                Parent AI Mascot
+                Chatbot
               </span>
             </div>
 
             <h3 className="text-lg font-black text-[#162660] mb-1.5 tracking-tight">
-              Express a Concern to Mascot
+              Express a Concern to Chatbot
             </h3>
             <p className="text-xs font-bold text-[#4A3B2C]/70 mb-3">
               Get grounded, multi-framework coaching for everyday parenting moments tonight.
@@ -206,7 +206,7 @@ export default function DashboardPage() {
                 d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
               />
             </svg>
-            <span>CHAT WITH MASCOT</span>
+            <span>CHAT WITH CHATBOT</span>
           </Link>
         </div>
 
