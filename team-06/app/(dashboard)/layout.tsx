@@ -8,7 +8,7 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-[#F1E4D1] text-[#162660] flex flex-col font-sans">
       <TopNav />
-      <main className="flex-1 max-w-6xl w-full mx-auto p-6">{children}</main>
+      <main className="max-w-6xl w-full mx-auto px-6 py-4 h-[calc(100vh-4rem)] overflow-hidden">{children}</main>
     </div>
   );
 }
