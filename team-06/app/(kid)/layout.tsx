@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import KidBackground from "@/components/kid-background";
+import CompassMascot from "@/components/compass-mascot";
 
 const NAV_ITEMS = [
   { href: "/kid", label: "Home", exact: true, idle: "bg-white", icon: "⌂" },
@@ -26,8 +28,10 @@ export default function KidLayout({
 }) {
   const pathname = usePathname();
   return (
-    <div className="min-h-screen bg-[#EFF6FF] text-[#0F172A]">
-      <header className="sticky top-0 z-50 border-b-2 border-[#0F172A]/10 bg-[#EFF6FF]/95 backdrop-blur">
+    <div className="relative min-h-screen text-[#0F172A]">
+      <KidBackground />
+      <CompassMascot />
+      <header className="sticky top-0 z-20 border-b-2 border-[#0F172A]/10 bg-[#EFF6FF]/95 backdrop-blur">
         <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link href="/kid" className="flex min-h-[44px] items-center gap-2 cursor-pointer touch-manipulation">
             <span className="flex h-10 w-10 -rotate-3 items-center justify-center rounded-2xl border-2 border-[#0F172A] bg-[#2563EB] text-xl font-black text-white shadow-[0_3px_0_#0F172A] transition-transform hover:rotate-0 active:scale-95">
@@ -71,7 +75,7 @@ export default function KidLayout({
           </div>
         </div>
       </header>
-      <main className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-6xl flex-col px-4 pb-28 pt-6 sm:px-6 sm:py-10 sm:pb-10">
+      <main className="relative z-10 mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-6xl flex-col px-4 pb-28 pt-6 sm:px-6 sm:py-10 sm:pb-10">
         {children}
       </main>
 
