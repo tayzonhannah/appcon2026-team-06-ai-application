@@ -15,7 +15,7 @@ export function RewardConfigPanel({ config, onChange }: Props) {
   };
 
   return (
-    <div className="aralkada-card p-5 flex flex-col gap-4">
+    <div className="aralkada-card p-5 flex flex-col justify-between h-full shadow-[0_5px_0_#4A3B2C]">
       {/* ── Header ── */}
       <div>
         <h2 className="text-lg font-black text-[#162660]">Screen Time &amp; Reward Mode</h2>
@@ -25,7 +25,7 @@ export function RewardConfigPanel({ config, onChange }: Props) {
       </div>
 
       {/* ── Mode Options ── */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 my-auto py-2">
         {/* Option A Row */}
         <div
           onClick={() => handleSelect("ai")}

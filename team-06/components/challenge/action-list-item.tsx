@@ -14,7 +14,7 @@ export function ActionListItem({ action, index, onToggleStatus }: Props) {
   return (
     <div
       onClick={() => onToggleStatus(action.id)}
-      className={`p-3.5 sm:p-4 rounded-2xl border-2 border-[#4A3B2C] shadow-[0_3px_0_#4A3B2C] flex items-center justify-between gap-3.5 transition-all duration-150 cursor-pointer hover:translate-y-[-1px] active:translate-y-[2px] active:shadow-[0_1px_0_#4A3B2C] ${
+      className={`p-3.5 sm:p-4 rounded-2xl border-2 border-[#4A3B2C] shadow-[0_3px_0_#4A3B2C] flex items-center justify-between gap-3.5 transition-all duration-150 cursor-pointer hover:translate-y-[-1px] active:translate-y-[2px] active:shadow-[0_1px_0_#4A3B2C] flex-1 min-h-[74px] ${
         isCompleted
           ? "bg-[#D0E6FD] opacity-80"
           : "bg-[#E8DAC4]"

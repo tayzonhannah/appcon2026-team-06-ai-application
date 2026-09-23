@@ -68,6 +68,21 @@ export const INITIAL_CHALLENGES: ChildChallenge[] = [
   },
   {
     id: "ch-4",
+    childId: "kid-101",
+    title: "Screen-Free Family Dinner Conversation",
+    description: "Engage in positive dinner discussion and share 3 highlights from the school day.",
+    earnedMinutes: 20,
+    targetFocusArea: "Sharing & Social Skills",
+    milestones: [
+      "Keep all devices away from the dining table",
+      "Share one positive highlight and one learning moment",
+      "Ask a sibling or parent about their day",
+    ],
+    status: "ongoing",
+    category: "Social",
+  },
+  {
+    id: "ch-5",
     childId: "kid-102",
     title: "Creative Storyboarding & Sharing",
     description: "Draft a 4-panel comic strip and share it during dinner with family.",
@@ -82,7 +97,7 @@ export const INITIAL_CHALLENGES: ChildChallenge[] = [
     category: "Creative",
   },
   {
-    id: "ch-5",
+    id: "ch-6",
     childId: "kid-102",
     title: "Frustration Cool-Down Challenge",
     description: "Use the Feelings Wheel when angry instead of shutting down.",
@@ -95,6 +110,35 @@ export const INITIAL_CHALLENGES: ChildChallenge[] = [
     ],
     status: "ongoing",
     category: "Mindfulness",
+  },
+  {
+    id: "ch-7",
+    childId: "kid-102",
+    title: "Bedtime Reading Routine",
+    description: "Read 10 pages of a bedtime story book before sleeping.",
+    earnedMinutes: 15,
+    targetFocusArea: "Homework & Academic Focus",
+    milestones: [
+      "Read 10 pages quietly in bed",
+      "Place bookmark and turn off reading light",
+    ],
+    status: "done",
+    category: "Academic",
+  },
+  {
+    id: "ch-8",
+    childId: "kid-102",
+    title: "Toy Cleanup & Sorting Sprint",
+    description: "Sort and store building blocks and art supplies in their labeled bins.",
+    earnedMinutes: 20,
+    targetFocusArea: "Emotional Regulation",
+    milestones: [
+      "Gather all blocks in under 5 minutes",
+      "Put art supplies in designated drawers",
+      "Check floor is clear of clutter",
+    ],
+    status: "ongoing",
+    category: "Routine",
   },
 ];
 
@@ -153,6 +197,14 @@ export const INITIAL_ACTIONS: ChildAction[] = [
     title: "Help Water Houseplants",
     category: "FAMILY & CHORES",
     earnedMinutes: 10,
+    status: "pending",
+  },
+  {
+    id: "act-8",
+    childId: "kid-102",
+    title: "Evening Stretch & Bedtime Journal",
+    category: "MINDFULNESS",
+    earnedMinutes: 15,
     status: "pending",
   },
 ];

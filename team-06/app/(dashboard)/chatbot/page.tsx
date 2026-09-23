@@ -234,8 +234,13 @@ export default function ChatbotPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isBotTyping, setIsBotTyping] = useState(false);
+  const [currentTime, setCurrentTime] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setCurrentTime(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -290,7 +295,7 @@ export default function ChatbotPage() {
         <div className="hidden sm:flex flex-col items-end">
           <span className="text-xs font-black text-[#162660]">Parent</span>
           <span className="text-[10px] font-bold text-[#162660]/60">
-            {formatTime(new Date())}, today
+            {currentTime ? `${currentTime}, today` : "Today"}
           </span>
         </div>
       </div>

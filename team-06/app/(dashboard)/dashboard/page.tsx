@@ -66,24 +66,26 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Focus Area Tags */}
+            {/* Focus Area Section with dedicated header for clean alignment (Image 2 Fix) */}
             {activeChild?.profile?.focusAreas && activeChild.profile.focusAreas.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mt-3 items-center">
-                <span className="text-[9px] font-black text-[#162660]/50 uppercase tracking-wider mr-1">
+              <div className="flex flex-col gap-1.5 mt-3">
+                <span className="text-[9px] font-black text-[#162660]/50 uppercase tracking-widest">
                   Active Focus:
                 </span>
-                {activeChild.profile.focusAreas.slice(0, 3).map((area, idx) => (
-                  <span
-                    key={area}
-                    className={`text-[9px] font-black border-2 rounded-full px-2.5 py-0.5 uppercase tracking-wide ${
-                      idx % 2 === 0
-                        ? "bg-[#D0E6FD] text-[#162660] border-[#162660]"
-                        : "bg-[#E8DAC4] text-[#162660] border-[#4A3B2C]"
-                    }`}
-                  >
-                    {area}
-                  </span>
-                ))}
+                <div className="flex flex-wrap gap-1.5 items-center">
+                  {activeChild.profile.focusAreas.slice(0, 3).map((area, idx) => (
+                    <span
+                      key={area}
+                      className={`text-[9px] font-black border-2 rounded-full px-2.5 py-0.5 uppercase tracking-wide ${
+                        idx % 2 === 0
+                          ? "bg-[#D0E6FD] text-[#162660] border-[#162660]"
+                          : "bg-[#E8DAC4] text-[#162660] border-[#4A3B2C]"
+                      }`}
+                    >
+                      {area}
+                    </span>
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -127,47 +129,41 @@ export default function DashboardPage() {
         </div>
 
         {/* ── BENTO TILE 2: Earned Screen Time & Daily Health Cap (lg:col-span-5) ── */}
-        <div className="lg:col-span-5 aralkada-card p-5 bg-[#D0E6FD] border-3 border-[#162660] shadow-[0_5px_0_#162660] flex flex-col justify-between gap-4">
-          <div className="flex items-center justify-between border-b border-[#162660]/20 pb-2.5">
+        <div className="lg:col-span-5 aralkada-card p-5 flex flex-col justify-between">
+          <div className="flex items-center justify-between border-b-2 border-[#4A3B2C]/15 pb-2.5">
             <span className="font-black text-xs text-[#162660] uppercase tracking-wider">
               Screen Time Balance
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-white border border-[#162660]/30 text-[9px] font-black text-[#162660]">
+            <span className="px-2.5 py-0.5 rounded-full bg-[#F8F1E5] border-2 border-[#4A3B2C]/30 text-[9px] font-black text-[#162660]">
               WHO Cap: {dailyCapHours} hrs/day
             </span>
           </div>
 
-          <div className="rounded-2xl bg-white border-2 border-[#162660] p-4 flex flex-col gap-2.5 shadow-[0_2px_0_#162660]">
+          {/* Centered Content (No nested inner box) */}
+          <div className="flex-1 flex flex-col justify-center gap-3 py-4">
             <div className="flex items-baseline justify-between">
-              <span className="text-xs font-black text-[#162660] uppercase tracking-wide">
+              <span className="text-xs sm:text-sm font-black text-[#162660] uppercase tracking-wide">
                 Total Earned Time:
               </span>
-              <span className="text-2xl font-black text-[#162660]">
+              <span className="text-2xl sm:text-3xl font-black text-[#162660]">
                 {activeChild?.tokens?.earnedHours ?? 0} hrs
               </span>
             </div>
 
             {/* Visual Progress Bar */}
-            <div className="w-full bg-[#E8DAC4] h-3 rounded-full overflow-hidden border border-[#4A3B2C]/30 my-0.5">
+            <div className="w-full bg-[#E8DAC4] h-3.5 rounded-full overflow-hidden border-2 border-[#4A3B2C]/30 my-0.5">
               <div
-                className="bg-[#162660] h-full rounded-full transition-all"
+                className="bg-[#162660] h-full rounded-full transition-all duration-300"
                 style={{ width: `${usedPercentage}%` }}
               />
             </div>
 
-            <div className="flex justify-between items-center text-[10px] font-black text-[#162660]/80">
+            <div className="flex justify-between items-center text-xs font-black text-[#162660]/80">
               <span>Used: {activeChild?.tokens?.usedHours ?? 0} hrs</span>
-              <span className="text-[#162660] underline">
+              <span className="text-[#162660] font-black underline">
                 Available: {activeChild?.tokens?.remainingHours ?? 0} hrs
               </span>
             </div>
-          </div>
-
-          {/* Micro Encouragement Banner */}
-          <div className="rounded-xl bg-white/70 border border-[#162660]/20 p-2.5 text-center">
-            <p className="text-[11px] font-black text-[#162660]">
-              ✨ 1 Minute of Offline Effort = 1 Minute Earned Screen Time
-            </p>
           </div>
         </div>
 
@@ -230,19 +226,23 @@ export default function DashboardPage() {
               Every minute of offline hard work unlocks healthy screen time.
             </p>
 
-            {/* Quick Stats Summary with Appealing Descriptions (Image 3/4 Style) */}
+            {/* Quick Stats Summary (Image 3/4 Fix: 1 Min Effort = 1 Min Screen) */}
             <div className="grid grid-cols-2 gap-2.5 mb-2">
-              <div className="p-2.5 rounded-2xl bg-[#F8F1E5] border-2 border-[#4A3B2C]/25 text-center shadow-sm">
+              <div className="p-2.5 rounded-2xl bg-[#F8F1E5] border-2 border-[#4A3B2C]/25 text-center shadow-sm flex flex-col justify-center">
                 <span className="block text-[9px] font-black text-[#162660]/60 uppercase tracking-wider">
                   Reward Rate
                 </span>
-                <span className="text-sm font-black text-[#162660]">1 Action = 15m</span>
+                <span className="text-xs sm:text-sm font-black text-[#162660] leading-tight mt-0.5">
+                  1 Min Effort = 1 Min Screen
+                </span>
               </div>
-              <div className="p-2.5 rounded-2xl bg-[#F8F1E5] border-2 border-[#4A3B2C]/25 text-center shadow-sm">
+              <div className="p-2.5 rounded-2xl bg-[#F8F1E5] border-2 border-[#4A3B2C]/25 text-center shadow-sm flex flex-col justify-center">
                 <span className="block text-[9px] font-black text-[#162660]/60 uppercase tracking-wider">
                   Max Daily Cap
                 </span>
-                <span className="text-sm font-black text-[#162660]">{dailyCapHours} hrs / day</span>
+                <span className="text-xs sm:text-sm font-black text-[#162660] leading-tight mt-0.5">
+                  {dailyCapHours} hrs / day
+                </span>
               </div>
             </div>
           </div>

@@ -16,43 +16,46 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      {/* ── Two-column layout ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-
-        {/* Left: Child Profile Cards */}
-        <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <p className="text-[10px] font-black text-[#162660]/50 uppercase tracking-widest">
+      {/* ── Two-column layout (Equal Height) ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+        {/* Left: Child Profile ID Cards */}
+        <div className="lg:col-span-7 flex flex-col gap-3.5 h-full">
+          <div className="flex items-center justify-between shrink-0">
+            <p className="text-[10px] font-black text-[#162660]/60 uppercase tracking-widest">
               Linked Children
             </p>
-            <span className="text-[10px] font-bold text-[#162660]/40">
+            <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#E8DAC4] border border-[#4A3B2C]/30 text-[#162660]">
               {children.length} profile{children.length !== 1 ? "s" : ""}
             </span>
           </div>
 
-          {children.map((child) => (
-            <ChildProfileCard
-              key={child.childId}
-              child={child}
-              onSave={updateChild}
-            />
-          ))}
+          {/* 2 ID Cards Side-by-Side in Equal Height Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 items-stretch">
+            {children.map((child) => (
+              <ChildProfileCard
+                key={child.childId}
+                child={child}
+                onSave={updateChild}
+              />
+            ))}
+          </div>
         </div>
 
-        {/* Right: Reward Config */}
-        <div className="lg:col-span-7 flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <p className="text-[10px] font-black text-[#162660]/50 uppercase tracking-widest">
+        {/* Right: Reward Config Panel (Equal Height) */}
+        <div className="lg:col-span-5 flex flex-col gap-3.5 h-full">
+          <div className="flex items-center justify-between shrink-0">
+            <p className="text-[10px] font-black text-[#162660]/60 uppercase tracking-widest">
               Reward Configuration
             </p>
-            <span className="text-[10px] font-bold text-[#162660]/40">
+            <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#E8DAC4] border border-[#4A3B2C]/30 text-[#162660]">
               Global Rule
             </span>
           </div>
 
-          <RewardConfigPanel config={rewardConfig} onChange={updateRewardConfig} />
+          <div className="flex-1 flex flex-col">
+            <RewardConfigPanel config={rewardConfig} onChange={updateRewardConfig} />
+          </div>
         </div>
-
       </div>
     </div>
   );

@@ -8,14 +8,17 @@ import {
   INITIAL_ACTIONS,
 } from "@/lib/constants/challenges";
 
-const CHALLENGES_KEY = "kith_child_challenges";
-const ACTIONS_KEY = "kith_child_actions";
+const CHALLENGES_KEY = "kith_child_challenges_v2";
+const ACTIONS_KEY = "kith_child_actions_v2";
 
 function loadFromStorage<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
   try {
     const raw = localStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as T) : fallback;
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed) && parsed.length === 0) return fallback;
+    return parsed as T;
   } catch {
     return fallback;
   }
@@ -31,12 +34,8 @@ function saveToStorage<T>(key: string, value: T): void {
 }
 
 export function useChildChallenges(childId: string) {
-  const [challenges, setChallenges] = useState<ChildChallenge[]>(() =>
-    loadFromStorage(CHALLENGES_KEY, INITIAL_CHALLENGES)
-  );
-  const [actions, setActions] = useState<ChildAction[]>(() =>
-    loadFromStorage(ACTIONS_KEY, INITIAL_ACTIONS)
-  );
+  const [challenges, setChallenges] = useState<ChildChallenge[]>(INITIAL_CHALLENGES);
+  const [actions, setActions] = useState<ChildAction[]>(INITIAL_ACTIONS);
 
   useEffect(() => {
     setChallenges(loadFromStorage(CHALLENGES_KEY, INITIAL_CHALLENGES));

@@ -127,6 +127,45 @@ body {
   box-shadow: 0 0 0 3px rgba(22, 38, 96, 0.2);
 }
 
+/* Hide native number input spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Custom Select Dropdown */
+.aralkada-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #F8F1E5;
+  border: 2px solid #4A3B2C;
+  border-radius: 14px;
+  color: #162660;
+  font-weight: 800;
+  font-size: 0.8125rem;
+  padding: 0.625rem 2.25rem 0.625rem 0.875rem;
+  box-shadow: 0 2px 0 #4A3B2C;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.aralkada-select:hover {
+  background-color: #F1E4D1;
+  border-color: #162660;
+}
+
+.aralkada-select:focus {
+  outline: none;
+  border-color: #162660;
+  background-color: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(22, 38, 96, 0.2);
+}
+
 @keyframes dropdownFadeIn {
   from {
     opacity: 0;

@@ -63,14 +63,10 @@ export function computeEarnedMinutes(
 
 /* ─── Hook ─── */
 export function useChildProfiles() {
-  const [children, setChildren] = useState<ChildAnalytics[]>(() =>
-    loadFromStorage(CHILDREN_KEY, MOCK_CHILDREN_LIST)
-  );
-  const [rewardConfig, setRewardConfig] = useState<RewardConfig>(() =>
-    loadFromStorage(REWARD_KEY, DEFAULT_REWARD_CONFIG)
-  );
+  const [children, setChildren] = useState<ChildAnalytics[]>(MOCK_CHILDREN_LIST);
+  const [rewardConfig, setRewardConfig] = useState<RewardConfig>(DEFAULT_REWARD_CONFIG);
 
-  // Hydrate from localStorage once client is ready
+  // Hydrate from localStorage once client is mounted
   useEffect(() => {
     setChildren(loadFromStorage(CHILDREN_KEY, MOCK_CHILDREN_LIST));
     setRewardConfig(loadFromStorage(REWARD_KEY, DEFAULT_REWARD_CONFIG));
