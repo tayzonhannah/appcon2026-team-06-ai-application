@@ -139,34 +139,74 @@ export default function KidHomePage() {
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-[#2563EB]">Emotional resilience • choose your next move</p>
             <h2 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">Today&apos;s missions</h2>
-            <p className="mt-1 text-xs font-bold text-[#475569] sm:hidden">Swipe to explore →</p>
           </div>
           <Link
             href="/kid/missions"
             className="shrink-0 min-h-[36px] inline-flex items-center rounded-xl border-2 border-[#2563EB] px-3 py-1.5 text-xs font-black uppercase tracking-wider text-[#2563EB] hover:bg-[#2563EB]/10 transition focus:outline-none focus:ring-2 focus:ring-[#2563EB] touch-manipulation"
           >
-            See all missions →
+            See all →
           </Link>
         </div>
-        {/* Mobile: horizontal snap carousel. Desktop: 3-col grid. */}
-        <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0">
+
+        {/* Mobile: vertical stacked rows. md+: 3-col tall card grid. */}
+        <div className="flex flex-col gap-3 md:grid md:grid-cols-3 md:gap-5">
           {KID_MISSIONS.map((mission) => {
             const isDone = Boolean(completions[mission.id]);
             const isUpNext = nextMission?.id === mission.id;
+            const ringClass = isUpNext && !isDone ? "ring-4 ring-[#F59E0B]/60" : "";
             return (
               <Link
                 href={`/kid/missions/${mission.id}`}
                 key={mission.id}
                 aria-label={`${mission.title}${isDone ? " (done)" : isUpNext ? " (up next)" : ""}`}
-                className={`${mission.color} group snap-center rounded-[20px] border-4 p-5 shadow-[0_5px_0_#0F172A] transition hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-[#2563EB]/30 touch-manipulation sm:w-[70%] md:w-auto ${isUpNext && !isDone ? "border-[#0F172A] ring-4 ring-[#F59E0B]/60" : "border-[#0F172A]"}`}
+                className={[
+                  mission.color,
+                  "group border-4 border-[#0F172A] rounded-[20px]",
+                  "transition active:scale-[0.98] active:shadow-none",
+                  "focus:outline-none focus:ring-4 focus:ring-[#2563EB]/30 touch-manipulation",
+                  ringClass,
+                  // Mobile: compact horizontal row
+                  "flex items-center gap-3 p-3 shadow-[0_3px_0_#0F172A]",
+                  // Desktop: tall vertical card
+                  "md:flex-col md:items-start md:p-5 md:shadow-[0_5px_0_#0F172A] md:hover:-translate-y-1",
+                ].join(" ")}
               >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-[#0F172A] bg-white text-xl font-black" aria-hidden="true">{mission.icon}</span>
-                  <span className="rounded-lg border-2 border-[#0F172A] bg-white px-2 py-1 text-[10px] font-black uppercase">{isDone ? "Done ✓" : isUpNext ? "Up next" : mission.reward}</span>
+                {/* Icon */}
+                <span
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-[#0F172A] bg-white text-xl font-black"
+                  aria-hidden="true"
+                >
+                  {mission.icon}
+                </span>
+
+                {/* Middle: title + detail */}
+                <div className="flex min-w-0 flex-1 flex-col">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="text-[15px] font-black leading-snug md:text-xl">{mission.title}</h3>
+                    <span className="shrink-0 rounded-lg border-2 border-[#0F172A] bg-white px-2 py-0.5 text-[10px] font-black uppercase">
+                      {isDone ? "Done ✓" : isUpNext ? "Up next" : mission.reward}
+                    </span>
+                  </div>
+                  <p className="mt-0.5 text-xs font-bold leading-relaxed text-[#0F172A]/65 md:text-sm md:mt-2">
+                    {mission.detail}
+                  </p>
                 </div>
-                <h3 className="mt-5 text-xl font-black leading-tight">{mission.title}</h3>
-                <p className="mt-2 text-sm font-bold leading-relaxed text-[#0F172A]/70">{mission.detail}</p>
-                <span className="mt-5 inline-flex min-h-[44px] items-center text-xs font-black uppercase tracking-wider underline underline-offset-4">Open mission →</span>
+
+                {/* Desktop CTA */}
+                <span className="mt-5 hidden md:inline-flex min-h-[44px] items-center text-xs font-black uppercase tracking-wider underline underline-offset-4">
+                  Open mission →
+                </span>
+
+                {/* Mobile chevron */}
+                <svg
+                  className="h-4 w-4 shrink-0 text-[#0F172A]/40 md:hidden"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
+                </svg>
               </Link>
             );
           })}
