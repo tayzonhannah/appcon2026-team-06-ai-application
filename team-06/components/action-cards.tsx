@@ -43,33 +43,38 @@ export function ActionCards() {
         </Link>
       </div>
 
-      {/* Option 2: Make Action / Challenge Card */}
+      {/* Option 2: Actions and Challenges navigation */}
       <div className="aralkada-card p-4 flex flex-col justify-between">
         <div>
           <div className="flex items-center justify-between mb-2.5">
             <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#E8DAC4] border-2 border-[#4A3B2C] shadow-[0_2px_0_#4A3B2C] text-[10px] font-black text-[#162660] uppercase tracking-wider">
-              Offline Skill Building
+              Plan offline growth
             </span>
           </div>
 
           <h3 className="text-lg font-black text-[#162660] mb-2 tracking-tight">
-            Make an Action or Challenge
+            Actions &amp; Challenges
           </h3>
 
-          {/* Quick Stats Summary */}
-          <div className="grid grid-cols-2 gap-2 mb-4">
-            <div className="p-2.5 rounded-xl bg-[#F8F1E5] border-2 border-[#4A3B2C]/30 text-center">
-              <span className="block text-[10px] font-black text-[#162660]/60 uppercase">
-                Reward Rate
+          <div className="grid grid-cols-1 gap-2 mb-4 sm:grid-cols-2">
+            <Link
+              href="/challenge?mode=actions"
+              className="rounded-xl border-2 border-[#4A3B2C]/30 bg-[#F8F1E5] p-3 transition hover:-translate-y-0.5 hover:border-[#162660] focus:outline-none focus:ring-2 focus:ring-[#162660]"
+            >
+              <span className="block text-sm font-black text-[#162660]">Actions</span>
+              <span className="mt-1 block text-[11px] font-bold leading-tight text-[#162660]/65">
+                Create and review daily offline actions.
               </span>
-              <span className="text-sm font-black text-[#162660]">1 Action = 15m</span>
-            </div>
-            <div className="p-2.5 rounded-xl bg-[#F8F1E5] border-2 border-[#4A3B2C]/30 text-center">
-              <span className="block text-[10px] font-black text-[#162660]/60 uppercase">
-                Max Daily Cap
+            </Link>
+            <Link
+              href="/challenge?mode=challenges"
+              className="rounded-xl border-2 border-[#4A3B2C]/30 bg-[#F8F1E5] p-3 transition hover:-translate-y-0.5 hover:border-[#162660] focus:outline-none focus:ring-2 focus:ring-[#162660]"
+            >
+              <span className="block text-sm font-black text-[#162660]">Challenges</span>
+              <span className="mt-1 block text-[11px] font-bold leading-tight text-[#162660]/65">
+                Create and review active challenges.
               </span>
-              <span className="text-sm font-black text-[#162660]">2.5 hrs / day</span>
-            </div>
+            </Link>
           </div>
         </div>
 
@@ -80,7 +85,7 @@ export function ActionCards() {
           <svg className="w-4 h-4 text-[#162660]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 4v16m8-8H4" />
           </svg>
-          <span>CREATE ACTION / CHALLENGE</span>
+          <span>OPEN ACTIONS &amp; CHALLENGES</span>
         </Link>
       </div>
     </div>
