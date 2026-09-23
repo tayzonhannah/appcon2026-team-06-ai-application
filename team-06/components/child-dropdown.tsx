@@ -51,9 +51,20 @@ export function ChildDropdown({ children: initialChildren, selected, onSelect, o
       childId: `kid-linked-${Date.now()}`,
       childName: randomName,
       avatarLetter: randomName[0],
+      avatarColor: "#6B7280",
       challenges: { ongoing: 1, done: 6 },
       actions: { ongoing: 3, done: 12 },
       tokens: { earnedHours: 3.5, usedHours: 1.0, remainingHours: 2.5, totalTokens: 70 },
+      profile: {
+        age: 8,
+        grade: "Grade 3",
+        personality: "Curious & Energetic",
+        attentionSpan: "medium",
+        focusAreas: ["Emotional Regulation", "Homework & Academic Focus"],
+        learningStyles: ["Kinesthetic"],
+        screenFreeZones: ["Mealtimes", "1hr Before Bed"],
+        notes: "Newly added child profile.",
+      },
     };
 
     const updatedList = [...childrenList, newChild];
