@@ -58,12 +58,12 @@ export default function LoginPage() {
       </header>
 
       {/* Main Container - Auth Card aligned to the right side */}
-      <main className="flex-1 w-full max-w-6xl mx-auto px-6 flex items-center justify-end py-8 sm:py-5">
+      <main className="flex-1 w-full max-w-6xl mx-auto px-6 flex items-center justify-end py-4">
         {/* Auth Form Card - Aralkada Claymorphism Style */}
-        <div className="w-full max-w-md aralkada-card p-6 sm:p-8 flex flex-col my-4">
+        <div className="w-full max-w-sm aralkada-card p-5 sm:p-6 flex flex-col my-0">
 
           {/* Card Title */}
-          <h2 className="text-2xl sm:text-3xl font-black text-center text-[#162660] mb-6 tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-black text-center text-[#162660] mb-3.5 tracking-tight">
             {authMode === "login" && "Log in"}
             {authMode === "signup_parent" && "Sign up as Parent"}
             {authMode === "signup_kid" && "Sign up Kid Account"}
@@ -71,15 +71,15 @@ export default function LoginPage() {
 
           {/* Error Message */}
           {errorMessage && (
-            <div className="mb-4 p-3 rounded-xl bg-red-100 border-2 border-red-400 text-red-800 text-xs font-bold text-center">
+            <div className="mb-3 p-2.5 rounded-xl bg-red-100 border-2 border-red-400 text-red-800 text-xs font-bold text-center">
               {errorMessage}
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="flex flex-col gap-4">
+          <form onSubmit={handleLogin} className="flex flex-col gap-2.5">
             {/* Username / Email */}
             <div>
-              <label htmlFor="auth-username" className="block text-xs font-black text-[#162660] uppercase tracking-wider mb-1.5">
+              <label htmlFor="auth-username" className="block text-[11px] font-black text-[#162660] uppercase tracking-wider mb-1">
                 {authMode === "signup_kid" ? "Kid Username" : "Email or username"}
               </label>
               <input
@@ -88,20 +88,20 @@ export default function LoginPage() {
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
                 placeholder={authMode === "signup_kid" ? "Choose a fun username" : "Email or username"}
-                className="w-full px-4 py-3.5 aralkada-input text-sm"
+                className="w-full px-3.5 py-2.5 aralkada-input text-sm"
               />
             </div>
 
             {/* Password */}
             <div>
-              <div className="flex justify-between items-center mb-1.5">
-                <label htmlFor="auth-password" className="block text-xs font-black text-[#162660] uppercase tracking-wider">
+              <div className="flex justify-between items-center mb-1">
+                <label htmlFor="auth-password" className="block text-[11px] font-black text-[#162660] uppercase tracking-wider">
                   Password
                 </label>
                 {authMode === "login" && (
                   <button
                     type="button"
-                    className="text-xs font-black text-[#162660]/75 hover:text-[#162660] uppercase tracking-wider underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#162660]/40 rounded"
+                    className="text-[11px] font-black text-[#162660]/75 hover:text-[#162660] uppercase tracking-wider underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#162660]/40 rounded"
                   >
                     FORGOT?
                   </button>
@@ -113,21 +113,21 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
-                className="w-full px-4 py-3.5 aralkada-input text-sm"
+                className="w-full px-3.5 py-2.5 aralkada-input text-sm"
               />
             </div>
 
             {/* Parent Link Code for Kid Sign up */}
             {authMode === "signup_kid" && (
               <div>
-                <label htmlFor="parent-code" className="block text-xs font-black text-[#162660] uppercase tracking-wider mb-1.5">
+                <label htmlFor="parent-code" className="block text-[11px] font-black text-[#162660] uppercase tracking-wider mb-1">
                   Parent Link Code
                 </label>
                 <input
                   id="parent-code"
                   type="text"
                   placeholder="Enter 6-digit code from parent"
-                  className="w-full px-4 py-3.5 aralkada-input text-sm"
+                  className="w-full px-3.5 py-2.5 aralkada-input text-sm"
                 />
               </div>
             )}
@@ -136,32 +136,32 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-2 py-4 aralkada-btn-primary text-base cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#162660]/30 disabled:opacity-60"
+              className="w-full mt-1 py-2.5 aralkada-btn-primary text-sm cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#162660]/30 disabled:opacity-60"
             >
               {isLoading
                 ? "LOGGING IN..."
                 : authMode === "login"
-                ? "LOG IN"
-                : authMode === "signup_parent"
-                ? "CREATE PARENT ACCOUNT"
-                : "CREATE KID ACCOUNT"}
+                  ? "LOG IN"
+                  : authMode === "signup_parent"
+                    ? "CREATE PARENT ACCOUNT"
+                    : "CREATE KID ACCOUNT"}
             </button>
           </form>
 
           {/* OR Divider */}
-          <div className="relative my-7 flex items-center justify-center">
+          <div className="relative my-3.5 flex items-center justify-center">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t-2 border-[#4A3B2C]/20"></div>
             </div>
-            <span className="relative px-3 bg-white text-xs font-black uppercase tracking-widest text-[#162660]/60">
+            <span className="relative px-3 bg-white text-[10px] font-black uppercase tracking-widest text-[#162660]/60">
               OR
             </span>
           </div>
 
           {/* Dual Sign Up Section */}
           {authMode === "login" ? (
-            <div className="flex flex-col gap-3">
-              <span className="text-center text-xs font-black text-[#162660]/80 uppercase tracking-wider mb-0.5">
+            <div className="flex flex-col gap-2">
+              <span className="text-center text-[11px] font-black text-[#162660]/80 uppercase tracking-wider mb-0.5">
                 Don't have an account? Sign up:
               </span>
 
@@ -171,7 +171,7 @@ export default function LoginPage() {
                   setErrorMessage("");
                   setAuthMode("signup_parent");
                 }}
-                className="w-full py-3.5 px-4 aralkada-btn-secondary text-sm cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#D0E6FD]"
+                className="w-full py-2.5 px-4 aralkada-btn-secondary text-xs cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#D0E6FD]"
               >
                 <span>SIGN UP AS PARENT</span>
               </button>
@@ -182,7 +182,7 @@ export default function LoginPage() {
                   setErrorMessage("");
                   setAuthMode("signup_kid");
                 }}
-                className="w-full py-3.5 px-4 aralkada-btn-outline text-sm cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#F1E4D1]"
+                className="w-full py-2.5 px-4 aralkada-btn-outline text-xs cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#F1E4D1]"
               >
                 <span>SIGN UP KID ACCOUNT</span>
               </button>
@@ -203,7 +203,7 @@ export default function LoginPage() {
           )}
 
           {/* Footer Terms */}
-          <p className="mt-8 text-center text-[11px] font-extrabold text-[#162660]/70 leading-relaxed">
+          <p className="mt-4 text-center text-[10px] font-extrabold text-[#162660]/70 leading-normal">
             By signing up or logging in, you agree to our{" "}
             <a href="#" className="underline font-black text-[#162660] focus:outline-none focus:ring-1 focus:ring-[#162660]">
               Terms

@@ -11,7 +11,7 @@ export function TopNav() {
       label: "Dashboard",
       href: "/dashboard",
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -25,7 +25,7 @@ export function TopNav() {
       label: "Challenge",
       href: "/challenge",
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="10" strokeWidth="2.2" />
           <circle cx="12" cy="12" r="6" strokeWidth="2.2" />
           <circle cx="12" cy="12" r="2" strokeWidth="2.2" />
@@ -36,7 +36,7 @@ export function TopNav() {
       label: "Chatbot",
       href: "/chatbot",
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -50,7 +50,7 @@ export function TopNav() {
       label: "Settings",
       href: "/settings",
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -88,22 +88,21 @@ export function TopNav() {
         </Link>
 
         {/* Nav items — underline style, no box border */}
-        <nav className="flex items-stretch h-full gap-1 flex-1">
+        <nav className="flex items-stretch h-full gap-2 flex-1 justify-center">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.label}
                 href={item.href}
-                className={`relative flex items-center gap-1.5 px-4 h-full font-black text-xs uppercase tracking-widest transition-colors ${
-                  isActive
+                className={`relative flex items-end pb-3 gap-2 px-4 h-full font-black text-xs uppercase tracking-wider transition-colors ${isActive
                     ? "text-[#162660]"
                     : "text-[#162660]/50 hover:text-[#162660]/80"
-                }`}
+                  }`}
               >
                 {/* Active underline */}
                 {isActive && (
-                  <span className="absolute bottom-0 left-4 right-4 h-[3px] bg-[#162660] rounded-t-full" />
+                  <span className="absolute bottom-0 left-3 right-3 h-[3px] bg-[#162660] rounded-t-full" />
                 )}
                 {item.icon}
                 <span className="hidden sm:inline">{item.label}</span>

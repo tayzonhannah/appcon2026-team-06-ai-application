@@ -6,9 +6,9 @@ interface AnalyticsCardProps {
 
 export function AnalyticsCard({ data }: AnalyticsCardProps) {
   return (
-    <div className="aralkada-card p-4 flex flex-col gap-3 h-full">
+    <div className="aralkada-card p-4 flex flex-col gap-3">
       {/* Header with Child Profile Pill */}
-      <div className="flex items-center justify-between border-b-2 border-[#4A3B2C]/20 pb-3">
+      <div className="flex items-center justify-between border-b border-[#4A3B2C]/15 pb-2">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-[#162660] text-[#F1E4D1] font-black text-base flex items-center justify-center border-2 border-[#4A3B2C] shadow-[0_2px_0_#4A3B2C]">
             {data.avatarLetter}
@@ -28,8 +28,8 @@ export function AnalyticsCard({ data }: AnalyticsCardProps) {
         </div>
       </div>
 
-      {/* Metrics Section: Actions & Challenges */}
-      <div className="flex flex-col justify-between flex-1">
+      {/* Metrics Section */}
+      <div className="flex flex-col gap-2">
         {/* Actions Box */}
         <div className="rounded-2xl border-2 border-[#4A3B2C] bg-[#F8F1E5] p-3 shadow-[0_3px_0_#4A3B2C]">
           <div className="flex items-center justify-between mb-2">
