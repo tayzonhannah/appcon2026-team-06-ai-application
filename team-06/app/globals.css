@@ -127,4 +127,15 @@ body {
   box-shadow: 0 0 0 3px rgba(22, 38, 96, 0.2);
 }
 
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 

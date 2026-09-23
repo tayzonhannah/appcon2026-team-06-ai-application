@@ -1,9 +1,40 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { authenticateParent } from "@/lib/auth/auth-service";
 
 export default function Home() {
+  const router = useRouter();
   const [authMode, setAuthMode] = useState<"login" | "signup_parent" | "signup_kid">("login");
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage("");
+
+    if (authMode !== "login") {
+      return;
+    }
+
+    if (!identifier.trim() || !password) {
+      setErrorMessage("Please enter both username/email and password.");
+      return;
+    }
+
+    setIsLoading(true);
+    const result = await authenticateParent(identifier, password);
+    setIsLoading(false);
+
+    if (result.success && result.redirectTo) {
+      router.push(result.redirectTo);
+    } else {
+      setErrorMessage(result.error || "Authentication failed.");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#F1E4D1] text-[#162660] flex flex-col font-sans selection:bg-[#D0E6FD] selection:text-[#162660]">
@@ -31,7 +62,6 @@ export default function Home() {
         {/* Auth Form Card - Aralkada Claymorphism Style */}
         <div className="w-full max-w-md aralkada-card p-6 sm:p-8 flex flex-col my-4">
 
-
           {/* Card Title */}
           <h2 className="text-2xl sm:text-3xl font-black text-center text-[#162660] mb-6 tracking-tight">
             {authMode === "login" && "Log in"}
@@ -39,8 +69,14 @@ export default function Home() {
             {authMode === "signup_kid" && "Sign up Kid Account"}
           </h2>
 
+          {/* Error Message */}
+          {errorMessage && (
+            <div className="mb-4 p-3 rounded-xl bg-red-100 border-2 border-red-400 text-red-800 text-xs font-bold text-center">
+              {errorMessage}
+            </div>
+          )}
 
-          <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-4">
+          <form onSubmit={handleLogin} className="flex flex-col gap-4">
             {/* Username / Email */}
             <div>
               <label htmlFor="auth-username" className="block text-xs font-black text-[#162660] uppercase tracking-wider mb-1.5">
@@ -49,6 +85,8 @@ export default function Home() {
               <input
                 id="auth-username"
                 type="text"
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
                 placeholder={authMode === "signup_kid" ? "Choose a fun username" : "Email or username"}
                 className="w-full px-4 py-3.5 aralkada-input text-sm"
               />
@@ -72,6 +110,8 @@ export default function Home() {
               <input
                 id="auth-password"
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
                 className="w-full px-4 py-3.5 aralkada-input text-sm"
               />
@@ -95,11 +135,16 @@ export default function Home() {
             {/* Primary Action Button */}
             <button
               type="submit"
-              className="w-full mt-2 py-4 aralkada-btn-primary text-base cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#162660]/30"
+              disabled={isLoading}
+              className="w-full mt-2 py-4 aralkada-btn-primary text-base cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#162660]/30 disabled:opacity-60"
             >
-              {authMode === "login" && "LOG IN"}
-              {authMode === "signup_parent" && "CREATE PARENT ACCOUNT"}
-              {authMode === "signup_kid" && "CREATE KID ACCOUNT"}
+              {isLoading
+                ? "LOGGING IN..."
+                : authMode === "login"
+                ? "LOG IN"
+                : authMode === "signup_parent"
+                ? "CREATE PARENT ACCOUNT"
+                : "CREATE KID ACCOUNT"}
             </button>
           </form>
 
@@ -122,7 +167,10 @@ export default function Home() {
 
               <button
                 type="button"
-                onClick={() => setAuthMode("signup_parent")}
+                onClick={() => {
+                  setErrorMessage("");
+                  setAuthMode("signup_parent");
+                }}
                 className="w-full py-3.5 px-4 aralkada-btn-secondary text-sm cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#D0E6FD]"
               >
                 <span>SIGN UP AS PARENT</span>
@@ -130,7 +178,10 @@ export default function Home() {
 
               <button
                 type="button"
-                onClick={() => setAuthMode("signup_kid")}
+                onClick={() => {
+                  setErrorMessage("");
+                  setAuthMode("signup_kid");
+                }}
                 className="w-full py-3.5 px-4 aralkada-btn-outline text-sm cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#F1E4D1]"
               >
                 <span>SIGN UP KID ACCOUNT</span>
@@ -140,15 +191,16 @@ export default function Home() {
             <div className="flex flex-col items-center">
               <button
                 type="button"
-                onClick={() => setAuthMode("login")}
+                onClick={() => {
+                  setErrorMessage("");
+                  setAuthMode("login");
+                }}
                 className="text-xs font-black text-[#162660] uppercase tracking-wider hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#162660]/40 rounded p-1"
               >
                 Already have an account? Log in
               </button>
             </div>
           )}
-
-
 
           {/* Footer Terms */}
           <p className="mt-8 text-center text-[11px] font-extrabold text-[#162660]/70 leading-relaxed">
@@ -163,10 +215,10 @@ export default function Home() {
             .
           </p>
         </div>
-
       </main>
     </div>
   );
 }
+
 
 
