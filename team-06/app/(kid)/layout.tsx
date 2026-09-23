@@ -35,10 +35,10 @@ export default function KidLayout({
         <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link href="/kid" className="flex min-h-[44px] items-center gap-2 cursor-pointer touch-manipulation">
             <span className="flex h-10 w-10 -rotate-3 items-center justify-center rounded-2xl border-2 border-[#0F172A] bg-[#2563EB] text-xl font-black text-white shadow-[0_3px_0_#0F172A] transition-transform hover:rotate-0 active:scale-95">
-              C
+              K
             </span>
             <span className="hidden text-sm font-black uppercase tracking-[0.14em] text-[#0F172A] sm:block">
-              My Adventure
+              Kith
             </span>
           </Link>
 

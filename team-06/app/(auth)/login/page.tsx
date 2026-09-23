@@ -46,11 +46,11 @@ export default function LoginPage() {
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer group">
             <div className="w-10 h-10 rounded-2xl bg-[#162660] flex items-center justify-center text-[#F1E4D1] font-black text-2xl border-2 border-[#4A3B2C] shadow-[0_3px_0_#4A3B2C] transform -rotate-2 group-hover:rotate-0 transition-transform">
-              C
+              K
             </div>
             <div className="flex flex-col">
               <span className="font-extrabold text-2xl tracking-tight text-[#162660] leading-none">
-                THE CONSCIOUS FUTURE
+                KITH
               </span>
               <span className="text-[10px] font-bold tracking-widest text-[#162660]/70 uppercase mt-1">
                 AI-POWERED OFFLINE GROWTH
