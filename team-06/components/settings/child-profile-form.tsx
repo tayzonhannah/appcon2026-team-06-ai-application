@@ -215,7 +215,7 @@ export function ChildProfileForm({ child, onSave, onClose }: Props) {
         </SectionTitle>
         <textarea
           rows={3}
-          className="w-full bg-[#F8F1E5] border-2 border-[#4A3B2C] rounded-xl px-3.5 py-2.5 text-sm font-bold text-[#162660] focus:outline-none focus:border-[#162660] focus:ring-2 focus:ring-[#162660]/20 resize-none leading-relaxed placeholder:font-medium placeholder:text-[#162660]/40"
+          className="w-full min-h-[88px] bg-[#F8F1E5] border-2 border-[#4A3B2C] rounded-2xl p-3.5 text-sm font-semibold text-[#162660] focus:outline-none focus:border-[#162660] focus:ring-2 focus:ring-[#162660]/20 resize-y leading-relaxed placeholder:text-xs placeholder:font-medium placeholder:text-[#162660]/40 block"
           value={form.notes}
           onChange={(e) => set("notes", e.target.value)}
           placeholder='e.g., "Has ADHD, responds well to visual schedules and positive encouragement."'

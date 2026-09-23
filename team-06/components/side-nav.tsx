@@ -24,7 +24,7 @@ export function SideNav() {
       ),
     },
     {
-      label: "Challenge",
+      label: "Challenge & Action",
       href: "/challenge",
       icon: (
         <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,9 +96,9 @@ export function SideNav() {
             </button>
 
             {/* 2. Logo Emblem below */}
-            <Link href="/dashboard" className="cursor-pointer group" title="The Conscious Future">
+            <Link href="/dashboard" className="cursor-pointer group" title="Kith.ai">
               <div className="w-9 h-9 rounded-xl bg-[#162660] flex items-center justify-center text-[#F1E4D1] font-black text-lg border-2 border-[#4A3B2C] shadow-[0_2px_0_#4A3B2C] transform -rotate-2 group-hover:rotate-0 transition-transform">
-                C
+                K
               </div>
             </Link>
           </div>
@@ -121,14 +121,14 @@ export function SideNav() {
               {/* 2. Logo beside it */}
               <Link href="/dashboard" className="flex items-center gap-2.5 overflow-hidden group min-w-0">
                 <div className="w-8 h-8 rounded-xl bg-[#162660] flex items-center justify-center text-[#F1E4D1] font-black text-lg border-2 border-[#4A3B2C] shadow-[0_2px_0_#4A3B2C] shrink-0 transform -rotate-2 group-hover:rotate-0 transition-transform">
-                  C
+                  K
                 </div>
                 <div className="flex flex-col min-w-0">
-                  <span className="font-extrabold text-xs tracking-tight text-[#162660] leading-none truncate">
-                    THE CONSCIOUS FUTURE
+                  <span className="font-extrabold text-sm tracking-tight text-[#162660] leading-none truncate">
+                    KITH.AI
                   </span>
-                  <span className="text-[8px] font-bold tracking-widest text-[#162660]/60 uppercase mt-0.5 truncate">
-                    Parent Dashboard
+                  <span className="text-[8px] font-bold tracking-wider text-[#162660]/60 uppercase mt-0.5 truncate">
+                    Resilience Building
                   </span>
                 </div>
               </Link>

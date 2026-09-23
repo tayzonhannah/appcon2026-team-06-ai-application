@@ -98,7 +98,7 @@ export const MOCK_CHILDREN_LIST: ChildAnalytics[] = [
     childId: "kid-102",
     childName: "Maya",
     avatarLetter: "M",
-    avatarColor: "#276749",
+    avatarColor: "#162660",
     challenges: { ongoing: 2, done: 11 },
     actions: { ongoing: 4, done: 22 },
     tokens: {
