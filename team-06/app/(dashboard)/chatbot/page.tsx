@@ -185,11 +185,44 @@ const RESOURCE_COLORS: Record<ResourceType, string> = {
   article: "bg-[#F8F1E5] border-[#4A3B2C] text-[#162660]",
 };
 
-const RESOURCE_ICONS: Record<ResourceType, string> = {
-  book: "📖",
-  strategy: "🧭",
-  activity: "🎯",
-  article: "📄",
+const BotIcon = ({ className = "w-5 h-5 text-[#F1E4D1]" }: { className?: string }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <rect x="3" y="8" width="18" height="12" rx="3" strokeWidth="2" />
+    <circle cx="9" cy="13" r="1.5" fill="currentColor" />
+    <circle cx="15" cy="13" r="1.5" fill="currentColor" />
+    <path strokeLinecap="round" strokeWidth="2" d="M10 17h4M12 4v4M9 4h6" />
+  </svg>
+);
+
+const ResourceIcon = ({ type }: { type: ResourceType }) => {
+  switch (type) {
+    case "book":
+      return (
+        <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+      );
+    case "strategy":
+      return (
+        <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        </svg>
+      );
+    case "activity":
+      return (
+        <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" strokeWidth="2" />
+          <circle cx="12" cy="12" r="6" strokeWidth="2" />
+          <circle cx="12" cy="12" r="2" strokeWidth="2" />
+        </svg>
+      );
+    case "article":
+      return (
+        <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      );
+  }
 };
 
 function formatTime(date: Date) {
@@ -251,8 +284,8 @@ export default function ChatbotPage() {
       <div className="shrink-0 flex items-center justify-between pb-3 border-b-2 border-[#4A3B2C]/20 mb-0">
         <div className="flex items-center gap-3">
           {/* Bot avatar */}
-          <div className="w-10 h-10 rounded-2xl bg-[#162660] border-2 border-[#4A3B2C] shadow-[0_3px_0_#4A3B2C] flex items-center justify-center text-xl">
-            🤖
+          <div className="w-10 h-10 rounded-2xl bg-[#162660] border-2 border-[#4A3B2C] shadow-[0_3px_0_#4A3B2C] flex items-center justify-center">
+            <BotIcon className="w-5 h-5 text-[#F1E4D1]" />
           </div>
           <div>
             <h1 className="text-lg font-black text-[#162660] leading-none">Parent Coaching Mascot</h1>
@@ -277,8 +310,8 @@ export default function ChatbotPage() {
         {/* Empty state */}
         {isEmpty && (
           <div className="flex flex-col items-center justify-center flex-1 gap-3 text-center px-4">
-            <div className="w-16 h-16 rounded-3xl bg-[#162660] border-2 border-[#4A3B2C] shadow-[0_4px_0_#4A3B2C] flex items-center justify-center text-3xl">
-              🤖
+            <div className="w-16 h-16 rounded-3xl bg-[#162660] border-2 border-[#4A3B2C] shadow-[0_4px_0_#4A3B2C] flex items-center justify-center">
+              <BotIcon className="w-8 h-8 text-[#F1E4D1]" />
             </div>
             <div>
               <p className="font-black text-[#162660] text-base">Hi, Parent!</p>
@@ -297,7 +330,7 @@ export default function ChatbotPage() {
                 ? "bg-[#162660] text-[#F1E4D1] border-[#0D1638] shadow-[#0D1638]"
                 : "bg-[#E8DAC4] text-[#162660] border-[#4A3B2C] shadow-[#4A3B2C]"
               }`}>
-              {msg.role === "user" ? "P" : "🤖"}
+              {msg.role === "user" ? "P" : <BotIcon className="w-4 h-4 text-[#162660]" />}
             </div>
 
             {/* Bubble + resources */}
@@ -319,7 +352,7 @@ export default function ChatbotPage() {
                       className={`rounded-xl border-2 p-3 ${RESOURCE_COLORS[res.type]}`}
                     >
                       <div className="flex items-center gap-1.5 mb-1">
-                        <span className="text-sm">{RESOURCE_ICONS[res.type]}</span>
+                        <ResourceIcon type={res.type} />
                         <span className="text-[10px] font-black uppercase tracking-wider">
                           {res.type}
                         </span>
@@ -344,8 +377,8 @@ export default function ChatbotPage() {
         {/* Typing indicator */}
         {isBotTyping && (
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#E8DAC4] border-2 border-[#4A3B2C] shadow-[0_2px_0_#4A3B2C] flex items-center justify-center text-sm">
-              🤖
+            <div className="w-8 h-8 rounded-xl bg-[#E8DAC4] border-2 border-[#4A3B2C] shadow-[0_2px_0_#4A3B2C] flex items-center justify-center">
+              <BotIcon className="w-4 h-4 text-[#162660]" />
             </div>
             <div className="bg-white border-2 border-[#4A3B2C] shadow-[0_3px_0_#4A3B2C] rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-1">
               <span className="w-1.5 h-1.5 bg-[#162660]/50 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
