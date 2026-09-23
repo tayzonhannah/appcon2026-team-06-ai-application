@@ -25,7 +25,7 @@ export default function DashboardPage() {
         </div>
 
         <ChildDropdown
-          children={MOCK_CHILDREN_LIST}
+          childOptions={MOCK_CHILDREN_LIST}
           selected={activeChild}
           onSelect={(child) => setSelectedChildId(child.childId)}
         />

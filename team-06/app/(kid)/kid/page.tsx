@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import {
   readGrowthActions,
-  submitGrowthAction,
+  readAvailableTokens,
   subscribeToGrowthActions,
 } from "@/lib/growth-store";
 
@@ -33,11 +33,30 @@ const missions = [
 ];
 
 export default function KidHomePage() {
+  const [currentTime, setCurrentTime] = useState(0);
+  useEffect(() => {
+    const initialClock = window.setTimeout(() => setCurrentTime(Date.now()), 0);
+    const timer = window.setInterval(() => setCurrentTime(Date.now()), 60000);
+    return () => {
+      window.clearTimeout(initialClock);
+      window.clearInterval(timer);
+    };
+  }, []);
+
   const actions = useSyncExternalStore(
     subscribeToGrowthActions,
     readGrowthActions,
     () => [],
-  ).filter((action) => action.childId === "kid-101" && action.status === "active");
+  ).filter((action) => action.childId === "kid-101" && action.status === "active" && action.progress !== "approved");
+  const tokenAwards = useSyncExternalStore(
+    subscribeToGrowthActions,
+    () => readAvailableTokens("kid-101"),
+    () => [],
+  );
+  const nextTokenExpiry = tokenAwards[0]?.expiresAt;
+  const minutesRemaining = nextTokenExpiry
+    ? Math.max(0, Math.ceil((new Date(nextTokenExpiry).getTime() - currentTime) / 60000))
+    : 0;
 
   return (
     <div className="my-auto space-y-6">
@@ -53,7 +72,7 @@ export default function KidHomePage() {
               Your choices build your adventure. Pick a mission, earn stars, and keep your streak moving.
             </p>
             <Link
-              href="/challenge"
+              href="/kid"
               className="mt-6 inline-flex items-center gap-2 rounded-xl border-2 border-[#0F172A] bg-[#F59E0B] px-5 py-3 text-sm font-black uppercase tracking-wider text-[#0F172A] shadow-[0_4px_0_#0F172A] transition hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-white/50"
             >
               Start today&apos;s mission <span aria-hidden="true">→</span>
@@ -70,13 +89,13 @@ export default function KidHomePage() {
             <span className="flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-[#0F172A] bg-[#EC4899] text-xl font-black text-white">★</span>
           </div>
           <div className="mt-7 flex items-end justify-between text-sm font-black">
-            <span>320 stars</span>
+            <span>{tokenAwards.reduce((total, token) => total + token.minutes, 0)} token minutes</span>
             <span className="text-[#475569]">400 to level 5</span>
           </div>
           <div className="mt-2 h-4 overflow-hidden rounded-full border-2 border-[#0F172A] bg-[#F1F5FD]" aria-label="80 percent progress">
             <div className="h-full w-4/5 rounded-full bg-[#EC4899]" />
           </div>
-          <p className="mt-4 text-sm font-bold leading-relaxed text-[#475569]">You are 80% of the way there. Nice work showing up.</p>
+          <p className="mt-4 text-sm font-bold leading-relaxed text-[#475569]">{minutesRemaining ? `${minutesRemaining} minutes left before your next token expires.` : "Complete an approved action to earn screen-time tokens."}</p>
         </aside>
       </section>
 
@@ -86,12 +105,12 @@ export default function KidHomePage() {
             <p className="text-xs font-black uppercase tracking-[0.18em] text-[#2563EB]">Choose your next move</p>
             <h2 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">Today&apos;s missions</h2>
           </div>
-          <Link href="/challenge" className="text-xs font-black uppercase tracking-wider text-[#2563EB] underline underline-offset-4 focus:outline-none focus:ring-2 focus:ring-[#2563EB]">See all</Link>
+          <Link href="/kid" className="text-xs font-black uppercase tracking-wider text-[#2563EB] underline underline-offset-4 focus:outline-none focus:ring-2 focus:ring-[#2563EB]">See all</Link>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
           {missions.map((mission) => (
             <Link
-              href="/challenge"
+              href="/kid"
               key={mission.title}
               className={`${mission.color} group rounded-[20px] border-4 border-[#0F172A] p-5 shadow-[0_5px_0_#0F172A] transition hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-[#2563EB]/30`}
             >
@@ -119,24 +138,18 @@ export default function KidHomePage() {
         ) : (
           <div className="grid gap-4 md:grid-cols-2">
             {actions.map((action) => (
-              <article key={action.id} className="rounded-[20px] border-4 border-[#0F172A] bg-white p-5 shadow-[0_5px_0_#0F172A]">
+              <Link href={`/kid/actions/${action.id}`} key={action.id} className="block rounded-[20px] border-4 border-[#0F172A] bg-white p-5 shadow-[0_5px_0_#0F172A] transition hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-[#2563EB]/30">
                 <div className="flex items-start justify-between gap-3">
                   <h3 className="text-xl font-black leading-tight">{action.name}</h3>
-                  <span className="shrink-0 rounded-lg border-2 border-[#0F172A] bg-[#D0E6FD] px-2 py-1 text-[10px] font-black uppercase">Assigned</span>
+                  <span className="shrink-0 rounded-lg border-2 border-[#0F172A] bg-[#D0E6FD] px-2 py-1 text-[10px] font-black uppercase">{action.progress === "submitted" ? "In review" : "Assigned"}</span>
                 </div>
                 <p className="mt-3 text-sm font-bold leading-relaxed text-[#475569]">{action.description}</p>
                 <div className="mt-4 rounded-xl border-2 border-[#0F172A]/20 bg-[#EFF6FF] p-3">
                   <p className="text-[10px] font-black uppercase tracking-wider text-[#475569]">How you finish it</p>
                   <p className="mt-1 text-sm font-black">{action.definitionOfDone}</p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => submitGrowthAction(action.id)}
-                  className="mt-4 w-full rounded-xl border-2 border-[#0F172A] bg-[#EC4899] px-4 py-3 text-xs font-black uppercase tracking-wider text-white shadow-[0_3px_0_#0F172A] transition hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-[#EC4899]/30"
-                >
-                  Submit for parent review
-                </button>
-              </article>
+                <span className="mt-4 block text-xs font-black uppercase tracking-wider underline underline-offset-4">Open action →</span>
+              </Link>
             ))}
           </div>
         )}

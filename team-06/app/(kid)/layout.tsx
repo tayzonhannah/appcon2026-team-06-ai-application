@@ -26,7 +26,7 @@ export default function KidLayout({
               Home
             </Link>
             <Link
-              href="/challenge"
+              href="/kid"
               className="rounded-xl border-2 border-[#0F172A] bg-[#F59E0B] px-3 py-2 text-xs font-black uppercase tracking-wider shadow-[0_2px_0_#0F172A] transition hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-[#F59E0B]/40"
             >
               Play

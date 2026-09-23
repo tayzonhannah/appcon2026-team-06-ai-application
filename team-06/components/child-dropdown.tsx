@@ -4,24 +4,19 @@ import { useState, useRef, useEffect } from "react";
 import { ChildAnalytics } from "@/lib/constants/analytics";
 
 interface ChildDropdownProps {
-  children: ChildAnalytics[];
+  childOptions: ChildAnalytics[];
   selected: ChildAnalytics;
   onSelect: (child: ChildAnalytics) => void;
   onAddChild?: (newChild: ChildAnalytics) => void;
 }
 
-export function ChildDropdown({ children: initialChildren, selected, onSelect, onAddChild }: ChildDropdownProps) {
+export function ChildDropdown({ childOptions: initialChildren, selected, onSelect, onAddChild }: ChildDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [childrenList, setChildrenList] = useState<ChildAnalytics[]>(initialChildren);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [linkCode, setLinkCode] = useState("");
   const [linkError, setLinkError] = useState("");
   const ref = useRef<HTMLDivElement>(null);
-
-  /* Keep childrenList updated if props change */
-  useEffect(() => {
-    setChildrenList(initialChildren);
-  }, [initialChildren]);
 
   /* Close dropdown on outside click */
   useEffect(() => {
