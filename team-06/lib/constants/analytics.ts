@@ -57,26 +57,6 @@ export const MOCK_CHILDREN_LIST: ChildAnalytics[] = [
       totalTokens: 110,
     },
   },
-  {
-    childId: "kid-103",
-    childName: "Sammy",
-    avatarLetter: "S",
-    challenges: {
-      ongoing: 1,
-      done: 5,
-    },
-    actions: {
-      ongoing: 2,
-      done: 14,
-    },
-    tokens: {
-      earnedHours: 3.0,
-      usedHours: 1.0,
-      remainingHours: 2.0,
-      totalTokens: 60,
-    },
-  },
 ];
 
 export const MOCK_CHILD_ANALYTICS: ChildAnalytics = MOCK_CHILDREN_LIST[0];
-

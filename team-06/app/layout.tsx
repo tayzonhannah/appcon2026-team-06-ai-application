@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
 
@@ -11,6 +11,13 @@ const nunito = Nunito({
 export const metadata: Metadata = {
   title: "The Conscious Future - Build Emotional Intelligence & Resilience",
   description: "An AI-assisted, gamified app helping children build emotional intelligence and offline resilience.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#F1E4D1",
 };
 
 export default function RootLayout({
