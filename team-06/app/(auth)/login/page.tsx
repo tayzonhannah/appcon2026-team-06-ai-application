@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authenticateParent } from "@/lib/auth/auth-service";
+import { seedDemoKid } from "@/lib/growth-store";
 import { PROFILE_COMPLETION_KEY } from "@/lib/constants/profile";
 
 export default function LoginPage() {
@@ -163,6 +164,16 @@ export default function LoginPage() {
           {/* Dual Sign Up Section */}
           {authMode === "login" ? (
             <div className="flex flex-col gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  seedDemoKid();
+                  router.push("/kid");
+                }}
+                className="w-full py-2.5 px-4 aralkada-btn-primary text-xs cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#162660]/30"
+              >
+                <span>CONTINUE AS DEMO KID →</span>
+              </button>
               <span className="text-center text-[11px] font-black text-[#162660]/80 uppercase tracking-wider mb-0.5">
                         Don&apos;t have an account? Sign up:
               </span>

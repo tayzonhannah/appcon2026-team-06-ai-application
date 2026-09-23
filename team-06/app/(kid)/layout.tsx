@@ -9,6 +9,11 @@ const NAV_ITEMS = [
   { href: "/kid/chatbot", label: "Compass", exact: false, idle: "bg-[#EC4899] text-white", icon: "◉" },
 ] as const;
 
+const MOBILE_NAV_ITEMS = [
+  ...NAV_ITEMS,
+  { href: "/login", label: "Profile", exact: true, idle: "bg-white", icon: "K", avatar: true },
+] as const;
+
 function isNavActive(href: string, pathname: string, exact: boolean) {
   if (exact) return pathname === href;
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -50,18 +55,16 @@ export default function KidLayout({
             })}
           </nav>
 
+          {/* Streak chip — same size language as the nav buttons */}
           <div className="flex items-center gap-2">
-            <span className="hidden rounded-xl border-2 border-[#0F172A] bg-white px-3 py-2 text-xs font-black md:block">
-              7 day streak
+            <span className="rounded-xl border-2 border-[#0F172A] bg-white px-4 py-2.5 text-xs font-black uppercase tracking-wider shadow-[0_2px_0_#0F172A]" aria-label="7 day streak">
+              🔥 7 days
             </span>
-            {/* Compact streak pill for mobile */}
-            <span className="rounded-xl border-2 border-[#0F172A] bg-white px-2.5 py-2 text-xs font-black md:hidden" aria-label="7 day streak">
-              🔥 7
-            </span>
+            {/* Desktop profile icon (mobile uses the bottom bar instead) */}
             <Link
               href="/login"
-              aria-label="Log out"
-              className="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-[#0F172A] bg-[#EC4899] text-sm font-black text-white shadow-[0_2px_0_#0F172A] transition hover:-translate-y-0.5 active:translate-y-0 active:shadow-none focus:outline-none focus:ring-4 focus:ring-[#EC4899]/30 touch-manipulation"
+              aria-label="Open profile"
+              className="hidden h-[42px] w-[42px] items-center justify-center rounded-xl border-2 border-[#0F172A] bg-[#EC4899] text-sm font-black text-white shadow-[0_2px_0_#0F172A] transition hover:-translate-y-0.5 active:translate-y-0 active:shadow-none focus:outline-none focus:ring-4 focus:ring-[#EC4899]/30 touch-manipulation sm:flex"
             >
               K
             </Link>
@@ -72,23 +75,29 @@ export default function KidLayout({
         {children}
       </main>
 
-      {/* Mobile bottom tab bar — big thumb-friendly targets */}
+      {/* Mobile bottom tab bar — Home / Missions / Compass / Profile */}
       <nav
         aria-label="Kid navigation mobile"
         className="fixed inset-x-0 bottom-0 z-50 border-t-4 border-[#0F172A] bg-white/95 backdrop-blur sm:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
-        <div className="grid grid-cols-3 gap-2 px-4 pb-3 pt-2">
-          {NAV_ITEMS.map((item) => {
+        <div className="grid grid-cols-4 gap-2 px-3 pb-3 pt-2">
+          {MOBILE_NAV_ITEMS.map((item) => {
             const isActive = isNavActive(item.href, pathname, item.exact);
+            const isAvatar = "avatar" in item && item.avatar;
             return (
               <Link
-                key={item.href}
+                key={item.href + item.label}
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
-                className={`flex min-h-[60px] flex-col items-center justify-center gap-0.5 rounded-2xl border-2 border-[#0F172A] text-[11px] font-black uppercase tracking-wider shadow-[0_3px_0_#0F172A] transition active:translate-y-0.5 active:shadow-none touch-manipulation ${isActive ? "bg-[#0F172A] text-white" : item.idle}`}
+                aria-label={item.label === "Profile" ? "Open profile" : undefined}
+                className={`flex min-h-[60px] flex-col items-center justify-center gap-0.5 rounded-2xl border-2 border-[#0F172A] text-[10px] font-black uppercase tracking-wider shadow-[0_3px_0_#0F172A] transition active:translate-y-0.5 active:shadow-none touch-manipulation ${isActive ? "bg-[#0F172A] text-white" : item.idle}`}
               >
-                <span aria-hidden="true" className="text-lg leading-none">{item.icon}</span>
+                {isAvatar ? (
+                  <span aria-hidden="true" className="flex h-6 w-6 items-center justify-center rounded-lg border-2 border-current text-[11px] font-black">K</span>
+                ) : (
+                  <span aria-hidden="true" className="text-lg leading-none">{item.icon}</span>
+                )}
                 {item.label}
               </Link>
             );

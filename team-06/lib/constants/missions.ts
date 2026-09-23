@@ -72,12 +72,15 @@ export function readMissionCompletions(): Record<string, string> {
 }
 
 export function completeMission(id: string) {
-  const next = { ...readMissionCompletions(), [id]: new Date().toISOString() };
+  const current = readMissionCompletions();
+  const firstCompletion = !current[id];
+  const next = { ...current, [id]: current[id] ?? new Date().toISOString() };
   const serialized = JSON.stringify(next);
   cachedCompletionsRaw = serialized;
   cachedCompletions = next;
   window.localStorage.setItem(MISSION_COMPLETION_KEY, serialized);
   window.dispatchEvent(new Event(MISSIONS_UPDATED_EVENT));
+  return firstCompletion;
 }
 
 export function subscribeToMissions(onChange: () => void) {

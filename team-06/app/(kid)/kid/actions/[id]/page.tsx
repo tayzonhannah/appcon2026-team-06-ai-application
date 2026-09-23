@@ -66,15 +66,26 @@ export default function KidActionDetailPage() {
         </div>
 
         {isApproved ? (
-          <div className="mt-6 rounded-2xl border-2 border-[#0F172A] bg-[#B7E4C7] p-5 text-sm font-black">Your parent approved this action. Nice work showing up.</div>
+          <div className="mt-6 rounded-2xl border-2 border-[#0F172A] bg-[#B7E4C7] p-5">
+            <p className="text-sm font-black">Approved — +15 min added to your tokens.</p>
+            <Link href="/kid/rewards" className="mt-3 inline-flex min-h-[48px] items-center justify-center rounded-xl border-2 border-[#0F172A] bg-white px-4 py-2.5 text-xs font-black uppercase tracking-wider shadow-[0_3px_0_#0F172A] touch-manipulation">See my tokens →</Link>
+          </div>
         ) : isSubmitted ? (
           <div className="mt-6 rounded-2xl border-2 border-[#0F172A] bg-[#D0E6FD] p-5 text-sm font-black">Your parent is reviewing this action. You can return home while you wait.</div>
         ) : (
-          <form onSubmit={handleSubmit} className="mt-6 rounded-2xl border-2 border-[#0F172A]/20 bg-[#F8F1E5] p-4 sm:p-5">
+          <>
+            {action.feedback ? (
+              <div className="mt-6 rounded-2xl border-2 border-[#0F172A] bg-[#FDE68A] p-5" aria-live="polite">
+                <p className="text-[10px] font-black uppercase tracking-wider text-[#475569]">Parent says — try again</p>
+                <p className="mt-2 text-sm font-black leading-relaxed">“{action.feedback}”</p>
+              </div>
+            ) : null}
+            <form onSubmit={handleSubmit} className="mt-6 rounded-2xl border-2 border-[#0F172A]/20 bg-[#F8F1E5] p-4 sm:p-5">
             <label htmlFor="completion-note" className="block text-xs font-black uppercase tracking-wider">What did you notice?</label>
             <textarea id="completion-note" value={completionNote} onChange={(event) => setCompletionNote(event.target.value)} rows={4} placeholder="Tell your parent how it went (optional)" className="mt-2 min-h-[96px] w-full resize-y rounded-xl border-2 border-[#0F172A]/30 bg-white px-4 py-3 text-base font-bold outline-none focus:border-[#2563EB] focus:ring-4 focus:ring-[#2563EB]/20" style={{ fontSize: "16px" }} />
-            <button type="submit" className="mt-4 min-h-[56px] w-full rounded-xl border-2 border-[#0F172A] bg-[#EC4899] px-4 py-3 text-xs font-black uppercase tracking-wider text-white shadow-[0_3px_0_#0F172A] transition hover:-translate-y-0.5 active:translate-y-0 active:shadow-none focus:outline-none focus:ring-4 focus:ring-[#EC4899]/30 touch-manipulation">Submit for parent review</button>
+            <button type="submit" className="mt-4 min-h-[56px] w-full rounded-xl border-2 border-[#0F172A] bg-[#EC4899] px-4 py-3 text-xs font-black uppercase tracking-wider text-white shadow-[0_3px_0_#0F172A] transition hover:-translate-y-0.5 active:translate-y-0 active:shadow-none focus:outline-none focus:ring-4 focus:ring-[#EC4899]/30 touch-manipulation">{action.feedback ? "Try again — submit for review" : "Submit for parent review"}</button>
           </form>
+          </>
         )}
       </div>
     </div>

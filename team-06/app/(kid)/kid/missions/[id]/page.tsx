@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState, useSyncExternalStore } from "react";
 import {
   KID_MISSIONS,
@@ -9,6 +9,7 @@ import {
   readMissionCompletions,
   subscribeToMissions,
 } from "@/lib/constants/missions";
+import { MISSION_TOKEN_MINUTES, mintTokenAward } from "@/lib/growth-store";
 
 const SERVER_COMPLETIONS_SNAPSHOT: Record<string, string> = {};
 
@@ -18,6 +19,7 @@ function getServerCompletionsSnapshot() {
 
 export default function KidMissionDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
   const mission = KID_MISSIONS.find((candidate) => candidate.id === id);
   const [checked, setChecked] = useState<boolean[]>(() =>
     mission ? mission.steps.map(() => false) : [],
@@ -42,6 +44,10 @@ export default function KidMissionDetailPage() {
 
   const isDone = Boolean(completions[mission.id]);
   const allChecked = checked.length === mission.steps.length && checked.every(Boolean);
+  // Loop closer: suggest the next incomplete mission after this one.
+  const nextUp = KID_MISSIONS.find(
+    (candidate) => candidate.id !== mission.id && !completions[candidate.id],
+  ) ?? null;
 
   const toggleStep = (index: number) => {
     if (isDone) return;
@@ -102,8 +108,20 @@ export default function KidMissionDetailPage() {
         {isDone ? (
           <div className="mt-6 rounded-2xl border-2 border-[#0F172A] bg-[#B7E4C7] p-5">
             <p className="text-base font-black">Nice work! You finished this mission. {mission.reward}</p>
+            {nextUp ? (
+              <p className="mt-2 text-sm font-bold text-[#0F172A]/70">
+                Next up: {nextUp.title} ({nextUp.reward})
+              </p>
+            ) : (
+              <p className="mt-2 text-sm font-bold text-[#0F172A]/70">
+                That was the last one — you finished everything.
+              </p>
+            )}
             <div className="mt-4 flex flex-col gap-2.5 sm:flex-row">
-              <Link href="/kid/missions" className="inline-flex min-h-[52px] items-center justify-center rounded-xl border-2 border-[#0F172A] bg-white px-4 py-3 text-center text-xs font-black uppercase tracking-wider shadow-[0_3px_0_#0F172A] active:translate-y-0.5 active:shadow-none touch-manipulation">Pick another mission</Link>
+              {nextUp ? (
+                <Link href={`/kid/missions/${nextUp.id}`} className="inline-flex min-h-[52px] items-center justify-center rounded-xl border-2 border-[#0F172A] bg-[#F59E0B] px-4 py-3 text-center text-xs font-black uppercase tracking-wider shadow-[0_3px_0_#0F172A] active:translate-y-0.5 active:shadow-none touch-manipulation">Start next: {nextUp.title} →</Link>
+              ) : null}
+              <Link href="/kid/missions" className="inline-flex min-h-[52px] items-center justify-center rounded-xl border-2 border-[#0F172A] bg-white px-4 py-3 text-center text-xs font-black uppercase tracking-wider shadow-[0_3px_0_#0F172A] active:translate-y-0.5 active:shadow-none touch-manipulation">All missions</Link>
               <Link href="/kid" className="inline-flex min-h-[52px] items-center justify-center rounded-xl border-2 border-[#0F172A] bg-[#0F172A] px-4 py-3 text-center text-xs font-black uppercase tracking-wider text-white shadow-[0_3px_0_#0F172A] active:translate-y-0.5 active:shadow-none touch-manipulation">Back to home</Link>
             </div>
           </div>
@@ -112,7 +130,13 @@ export default function KidMissionDetailPage() {
             <button
               type="button"
               disabled={!allChecked}
-              onClick={() => completeMission(mission.id)}
+              onClick={() => {
+                const firstCompletion = completeMission(mission.id);
+                if (firstCompletion) {
+                  mintTokenAward("kid-101", `mission-${mission.id}`, MISSION_TOKEN_MINUTES);
+                  router.push(`/kid/rewards?earned=${MISSION_TOKEN_MINUTES}&from=${mission.id}`);
+                }
+              }}
               className="min-h-[56px] w-full rounded-xl border-2 border-[#0F172A] bg-[#F59E0B] px-4 py-4 text-sm font-black uppercase tracking-wider shadow-[0_4px_0_#0F172A] transition hover:-translate-y-0.5 active:translate-y-0 active:shadow-none focus:outline-none focus:ring-4 focus:ring-white/60 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 touch-manipulation"
             >
               {allChecked ? `Finish mission • ${mission.reward}` : "Finish all steps to complete"}
