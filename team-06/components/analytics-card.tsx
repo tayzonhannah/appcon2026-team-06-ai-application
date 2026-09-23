@@ -74,14 +74,14 @@ export function AnalyticsCard({ data }: AnalyticsCardProps) {
           </div>
         </div>
 
-        {/* Tokens & Earned Screen Time Box */}
+        {/* Minutes & Earned Screen Time Box */}
         <div className="rounded-2xl border-2 border-[#4A3B2C] bg-[#D0E6FD] p-3 shadow-[0_3px_0_#4A3B2C]">
           <div className="flex items-center justify-between mb-2">
             <span className="font-black text-[11px] text-[#162660] uppercase tracking-wider">
-              Tokens &amp; Screen Time Earned
+              Minutes &amp; Screen Time Earned
             </span>
             <span className="text-[11px] font-extrabold text-[#162660]/70">
-              {data.tokens.totalTokens} Tokens
+              {data.minutes.totalMinutes} min
             </span>
           </div>
 
@@ -91,7 +91,7 @@ export function AnalyticsCard({ data }: AnalyticsCardProps) {
                 Earned Screen Time:
               </span>
               <span className="text-xl font-black text-[#162660]">
-                {data.tokens.earnedHours} hrs
+                {data.minutes.earnedMinutes} min
               </span>
             </div>
 
@@ -99,14 +99,14 @@ export function AnalyticsCard({ data }: AnalyticsCardProps) {
               <div
                 className="bg-[#162660] h-full rounded-full transition-all"
                 style={{
-                  width: `${(data.tokens.usedHours / data.tokens.earnedHours) * 100}%`,
+                  width: `${(data.minutes.usedMinutes / data.minutes.earnedMinutes) * 100}%`,
                 }}
               />
             </div>
 
             <div className="flex justify-between items-center text-[10px] font-extrabold text-[#162660]/75">
-              <span>Used: {data.tokens.usedHours} hrs</span>
-              <span>Available: {data.tokens.remainingHours} hrs</span>
+              <span>Used: {data.minutes.usedMinutes} min</span>
+              <span>Available: {data.minutes.remainingMinutes} min</span>
             </div>
           </div>
         </div>

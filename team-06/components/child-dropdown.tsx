@@ -49,6 +49,7 @@ export function ChildDropdown({ childOptions: initialChildren, selected, onSelec
       challenges: { ongoing: 1, done: 6 },
       actions: { ongoing: 3, done: 12 },
       tokens: { earnedHours: 3.5, usedHours: 1.0, remainingHours: 2.5, totalTokens: 70 },
+      minutes: { earnedMinutes: 210, usedMinutes: 60, remainingMinutes: 150, totalMinutes: 70 },
     };
 
     const updatedList = [...childrenList, newChild];

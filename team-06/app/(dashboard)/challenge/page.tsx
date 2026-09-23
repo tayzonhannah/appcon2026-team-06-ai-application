@@ -2,15 +2,18 @@
 
 import { FormEvent, useState } from "react";
 import { GrowthAction, saveGrowthAction } from "@/lib/growth-store";
+import { KidChallenge, saveChallenge } from "@/lib/challenge-store";
 
 interface Challenge {
   name: string;
   description: string;
   milestones: string[];
   timeline: string;
+  minutes: number;
 }
 
 const timelineOptions = ["1 week", "2 weeks", "1 month", "Custom timeline"];
+const minuteOptions = [10, 15, 20, 30];
 
 export default function ChallengePage() {
   const [actionName, setActionName] = useState("");
@@ -22,6 +25,7 @@ export default function ChallengePage() {
   const [description, setDescription] = useState("");
   const [milestones, setMilestones] = useState(["", ""]);
   const [timeline, setTimeline] = useState(timelineOptions[0]);
+  const [minutes, setMinutes] = useState(minuteOptions[1]);
   const [activeChallenge, setActiveChallenge] = useState<Challenge | null>(null);
 
   const updateMilestone = (index: number, value: string) => {
@@ -36,12 +40,28 @@ export default function ChallengePage() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setActiveChallenge({
+    const cleanedMilestones = milestones.map((milestone) => milestone.trim()).filter(Boolean);
+    const draft: Challenge = {
       name: name.trim(),
       description: description.trim(),
-      milestones: milestones.map((milestone) => milestone.trim()).filter(Boolean),
+      milestones: cleanedMilestones,
       timeline,
-    });
+      minutes,
+    };
+    setActiveChallenge(draft);
+    const challenge: KidChallenge = {
+      id: `challenge-${Date.now()}`,
+      childId: "kid-101",
+      title: draft.name,
+      description: draft.description,
+      milestones: cleanedMilestones,
+      timeline,
+      minutes,
+      status: "active",
+      progress: "assigned",
+      createdAt: new Date().toISOString(),
+    };
+    saveChallenge(challenge);
   };
 
   const handleActionSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -58,6 +78,9 @@ export default function ChallengePage() {
     };
     saveGrowthAction(action);
     setActiveAction(action);
+    setActionName("");
+    setActionDescription("");
+    setDefinitionOfDone("");
   };
 
   return (
@@ -111,6 +134,10 @@ export default function ChallengePage() {
                   <p className="text-[10px] font-black uppercase tracking-wider text-[#162660]/60">Definition of done</p>
                   <p className="mt-1 text-sm font-bold text-[#162660]">{activeAction.definitionOfDone}</p>
                 </div>
+                <div className="mt-4 rounded-xl border-2 border-[#162660] bg-[#B7E4C7] p-3 text-sm font-black text-[#162660]" aria-live="polite">
+                  Assigned to Kai — now visible on kid home under Offline actions.
+                </div>
+                <a href="/dashboard" className="mt-3 inline-flex min-h-[44px] items-center justify-center rounded-xl border-2 border-[#162660] bg-white px-4 py-2.5 text-xs font-black uppercase tracking-wider text-[#162660] shadow-[0_2px_0_#162660]">Review in Parent Overview →</a>
               </div>
             ) : (
               <div className="mt-4 rounded-xl border-2 border-dashed border-[#4A3B2C]/40 bg-white/60 p-5 text-sm font-bold leading-relaxed text-[#162660]/65">Your active action will appear here after you save it.</div>
@@ -159,11 +186,19 @@ export default function ChallengePage() {
             </div>
           </div>
 
-          <div>
-            <label htmlFor="challenge-timeline" className="mb-1.5 block text-xs font-black uppercase tracking-wider text-[#162660]">Timeline</label>
-            <select id="challenge-timeline" value={timeline} onChange={(event) => setTimeline(event.target.value)} className="aralkada-input w-full px-4 py-3 text-sm">
-              {timelineOptions.map((option) => <option key={option}>{option}</option>)}
-            </select>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label htmlFor="challenge-timeline" className="mb-1.5 block text-xs font-black uppercase tracking-wider text-[#162660]">Timeline</label>
+              <select id="challenge-timeline" value={timeline} onChange={(event) => setTimeline(event.target.value)} className="aralkada-input w-full px-4 py-3 text-sm">
+                {timelineOptions.map((option) => <option key={option}>{option}</option>)}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="challenge-minutes" className="mb-1.5 block text-xs font-black uppercase tracking-wider text-[#162660]">Screentime reward</label>
+              <select id="challenge-minutes" value={minutes} onChange={(event) => setMinutes(Number(event.target.value))} className="aralkada-input w-full px-4 py-3 text-sm">
+                {minuteOptions.map((option) => <option key={option} value={option}>+{option} min</option>)}
+              </select>
+            </div>
           </div>
 
           <button type="submit" className="aralkada-btn-primary mt-1 flex w-full items-center justify-center gap-2 py-3 text-sm">Create challenge</button>
@@ -176,10 +211,13 @@ export default function ChallengePage() {
               <h2 className="text-2xl font-black text-[#162660]">{activeChallenge.name}</h2>
               <p className="mt-2 text-sm font-bold leading-relaxed text-[#162660]/75">{activeChallenge.description}</p>
               <div className="mt-5 rounded-xl border-2 border-[#4A3B2C]/30 bg-white p-3">
-                <div className="flex items-center justify-between text-xs font-black text-[#162660]"><span>{activeChallenge.milestones.length} milestones</span><span>{activeChallenge.timeline}</span></div>
+                <div className="flex items-center justify-between text-xs font-black text-[#162660]"><span>{activeChallenge.milestones.length} milestones</span><span>{activeChallenge.timeline} • +{activeChallenge.minutes} min</span></div>
                 <ol className="mt-3 flex flex-col gap-2">
                   {activeChallenge.milestones.map((milestone, index) => <li key={`${milestone}-${index}`} className="flex items-start gap-2 text-sm font-bold text-[#162660]/80"><span className="font-black text-[#162660]">{index + 1}.</span>{milestone}</li>)}
                 </ol>
+              </div>
+              <div className="mt-4 rounded-xl border-2 border-[#162660] bg-[#B7E4C7] p-3 text-sm font-black text-[#162660]" aria-live="polite">
+                Assigned to Kai — visible under Kid Challenges. Approval earns +{activeChallenge.minutes} min.
               </div>
             </div>
           ) : (

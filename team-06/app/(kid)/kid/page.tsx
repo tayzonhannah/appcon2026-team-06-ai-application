@@ -91,7 +91,7 @@ export default function KidHomePage() {
         <div className="relative overflow-hidden rounded-[24px] border-4 border-[#0F172A] bg-[#2563EB] p-6 text-white shadow-[0_7px_0_#0F172A] sm:p-8">
           <div className="absolute -right-8 -top-10 h-36 w-36 rounded-full border-4 border-[#0F172A]/15 bg-[#60A5FA]" />
           <div className="relative">
-            <p className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-[#DBEAFE]">Up next — one small win</p>
+            <p className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-[#DBEAFE]">Emotional resilience • one small win</p>
             <h1 className="max-w-xl text-3xl font-black leading-[0.95] tracking-tight sm:text-5xl">
               Hey, Kai. Ready for one small win?
             </h1>
@@ -137,7 +137,7 @@ export default function KidHomePage() {
       <section>
         <div className="mb-3 flex items-end justify-between gap-3">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#2563EB]">Choose your next move</p>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#2563EB]">Emotional resilience • choose your next move</p>
             <h2 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">Today&apos;s missions</h2>
             <p className="mt-1 text-xs font-bold text-[#475569] sm:hidden">Swipe to explore →</p>
           </div>
@@ -170,7 +170,7 @@ export default function KidHomePage() {
 
       <section>
         <div className="mb-3">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#2563EB]">From your parent</p>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#2563EB]">Offline connections • from your parent</p>
           <h2 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">Offline actions</h2>
         </div>
         {actions.length === 0 ? (
@@ -195,6 +195,14 @@ export default function KidHomePage() {
             ))}
           </div>
         )}
+      </section>
+
+      <section className="flex flex-col items-stretch justify-between gap-4 rounded-[20px] border-4 border-[#0F172A] bg-[#B7E4C7] p-5 shadow-[0_5px_0_#0F172A] sm:flex-row sm:items-center">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.18em]">Self-sufficiency • self-paced</p>
+          <h2 className="mt-1 text-xl font-black">Build your own challenge project.</h2>
+        </div>
+        <Link href="/kid/challenges" className="inline-flex min-h-[52px] items-center justify-center rounded-xl border-2 border-[#0F172A] bg-white px-4 py-3 text-xs font-black uppercase tracking-wider shadow-[0_3px_0_#0F172A] transition hover:-translate-y-0.5 active:translate-y-0 active:shadow-none focus:outline-none focus:ring-4 focus:ring-white/60 touch-manipulation">My challenges</Link>
       </section>
 
       <section className="flex flex-col items-stretch justify-between gap-4 rounded-[20px] border-4 border-[#0F172A] bg-[#F59E0B] p-5 shadow-[0_5px_0_#0F172A] sm:flex-row sm:items-center">

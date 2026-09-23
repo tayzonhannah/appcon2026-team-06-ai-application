@@ -16,6 +16,12 @@ export interface ChildAnalytics {
     remainingHours: number;
     totalTokens: number;
   };
+  minutes: {
+    earnedMinutes: number;
+    usedMinutes: number;
+    remainingMinutes: number;
+    totalMinutes: number;
+  };
 }
 
 export const MOCK_CHILDREN_LIST: ChildAnalytics[] = [
@@ -37,6 +43,12 @@ export const MOCK_CHILDREN_LIST: ChildAnalytics[] = [
       remainingHours: 2.5,
       totalTokens: 90,
     },
+    minutes: {
+      earnedMinutes: 270,
+      usedMinutes: 120,
+      remainingMinutes: 150,
+      totalMinutes: 90,
+    },
   },
   {
     childId: "kid-102",
@@ -55,6 +67,12 @@ export const MOCK_CHILDREN_LIST: ChildAnalytics[] = [
       usedHours: 1.5,
       remainingHours: 3.5,
       totalTokens: 110,
+    },
+    minutes: {
+      earnedMinutes: 300,
+      usedMinutes: 90,
+      remainingMinutes: 210,
+      totalMinutes: 110,
     },
   },
 ];
