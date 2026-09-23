@@ -25,6 +25,16 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+/* Kid mobile: smooth snap scrolling + no accidental text selection on tap targets */
+.kid-no-scrollbar {
+  scrollbar-width: none;
+}
+.kid-no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* Aralkada-style Claymorphism utilities */

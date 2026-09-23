@@ -7,12 +7,19 @@ import {
   readGrowthActions,
   submitGrowthAction,
   subscribeToGrowthActions,
+  type GrowthAction,
 } from "@/lib/growth-store";
+
+const SERVER_ACTIONS_SNAPSHOT: GrowthAction[] = [];
+
+function getServerActionsSnapshot() {
+  return SERVER_ACTIONS_SNAPSHOT;
+}
 
 export default function KidActionDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [completionNote, setCompletionNote] = useState("");
-  const actions = useSyncExternalStore(subscribeToGrowthActions, readGrowthActions, () => []);
+  const actions = useSyncExternalStore(subscribeToGrowthActions, readGrowthActions, getServerActionsSnapshot);
   const action = actions.find((candidate) => candidate.id === id && candidate.childId === "kid-101");
 
   if (!action) {
@@ -36,9 +43,9 @@ export default function KidActionDetailPage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-3xl py-6 sm:py-10">
-      <Link href="/kid" className="text-xs font-black uppercase tracking-wider text-[#2563EB] underline underline-offset-4">← Back to home</Link>
-      <div className="mt-5 rounded-[24px] border-4 border-[#0F172A] bg-white p-6 shadow-[0_7px_0_#0F172A] sm:p-8">
+    <div className="mx-auto w-full max-w-3xl py-2 sm:py-10">
+      <Link href="/kid" className="inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-xs font-black uppercase tracking-wider text-[#2563EB] underline underline-offset-4 touch-manipulation">← Back to home</Link>
+      <div className="mt-4 rounded-[24px] border-4 border-[#0F172A] bg-white p-5 shadow-[0_7px_0_#0F172A] sm:p-8">
         <div className="flex flex-col gap-3 border-b-2 border-[#0F172A]/10 pb-5 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-[#2563EB]">Offline action</p>
@@ -63,10 +70,10 @@ export default function KidActionDetailPage() {
         ) : isSubmitted ? (
           <div className="mt-6 rounded-2xl border-2 border-[#0F172A] bg-[#D0E6FD] p-5 text-sm font-black">Your parent is reviewing this action. You can return home while you wait.</div>
         ) : (
-          <form onSubmit={handleSubmit} className="mt-6 rounded-2xl border-2 border-[#0F172A]/20 bg-[#F8F1E5] p-5">
+          <form onSubmit={handleSubmit} className="mt-6 rounded-2xl border-2 border-[#0F172A]/20 bg-[#F8F1E5] p-4 sm:p-5">
             <label htmlFor="completion-note" className="block text-xs font-black uppercase tracking-wider">What did you notice?</label>
-            <textarea id="completion-note" value={completionNote} onChange={(event) => setCompletionNote(event.target.value)} rows={4} placeholder="Tell your parent how it went (optional)" className="mt-2 w-full resize-y rounded-xl border-2 border-[#0F172A]/30 bg-white px-3 py-3 text-sm font-bold outline-none focus:border-[#2563EB] focus:ring-4 focus:ring-[#2563EB]/20" />
-            <button type="submit" className="mt-4 w-full rounded-xl border-2 border-[#0F172A] bg-[#EC4899] px-4 py-3 text-xs font-black uppercase tracking-wider text-white shadow-[0_3px_0_#0F172A] transition hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-[#EC4899]/30">Submit for parent review</button>
+            <textarea id="completion-note" value={completionNote} onChange={(event) => setCompletionNote(event.target.value)} rows={4} placeholder="Tell your parent how it went (optional)" className="mt-2 min-h-[96px] w-full resize-y rounded-xl border-2 border-[#0F172A]/30 bg-white px-4 py-3 text-base font-bold outline-none focus:border-[#2563EB] focus:ring-4 focus:ring-[#2563EB]/20" style={{ fontSize: "16px" }} />
+            <button type="submit" className="mt-4 min-h-[56px] w-full rounded-xl border-2 border-[#0F172A] bg-[#EC4899] px-4 py-3 text-xs font-black uppercase tracking-wider text-white shadow-[0_3px_0_#0F172A] transition hover:-translate-y-0.5 active:translate-y-0 active:shadow-none focus:outline-none focus:ring-4 focus:ring-[#EC4899]/30 touch-manipulation">Submit for parent review</button>
           </form>
         )}
       </div>

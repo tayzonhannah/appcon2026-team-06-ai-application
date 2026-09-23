@@ -10,8 +10,15 @@ import {
   readGrowthActions,
   rejectGrowthAction,
   subscribeToGrowthActions,
+  type GrowthAction,
 } from "@/lib/growth-store";
 import { useSyncExternalStore } from "react";
+
+const SERVER_ACTIONS_SNAPSHOT: GrowthAction[] = [];
+
+function getServerActionsSnapshot() {
+  return SERVER_ACTIONS_SNAPSHOT;
+}
 
 export default function DashboardPage() {
   const [selectedChildId, setSelectedChildId] = useState(MOCK_CHILDREN_LIST[0].childId);
@@ -21,7 +28,7 @@ export default function DashboardPage() {
   const submittedActions = useSyncExternalStore(
     subscribeToGrowthActions,
     readGrowthActions,
-    () => [],
+    getServerActionsSnapshot,
   ).filter((action) => action.childId === selectedChildId && action.progress === "submitted");
 
   return (
