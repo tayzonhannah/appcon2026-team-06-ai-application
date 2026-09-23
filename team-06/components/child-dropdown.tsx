@@ -165,15 +165,15 @@ export function ChildDropdown({ childOptions: initialChildren, selected, onSelec
                         {child.avatarLetter}
                       </span>
 
-                      {/* Name + quick stat */}
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-sm font-black text-[#162660] leading-none">
-                          {child.childName}
-                        </span>
-                        <span className="text-[10px] font-bold text-[#162660]/60 mt-0.5">
-                          {child.tokens.totalTokens} tokens · {child.tokens.earnedHours} hrs
-                        </span>
-                      </div>
+{/* Name + quick stat */}
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-sm font-black text-[#162660] leading-none">
+                            {child.childName}
+                          </span>
+                          <span className="text-[10px] font-bold text-[#162660]/60 mt-0.5">
+                            {child.minutes.totalMinutes} min · {child.minutes.earnedMinutes} hrs
+                          </span>
+                        </div>
 
                       {/* Check mark for selected */}
                       {isSelected && (

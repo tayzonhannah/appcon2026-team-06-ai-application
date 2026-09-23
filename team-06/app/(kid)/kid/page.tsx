@@ -69,10 +69,10 @@ export default function KidHomePage() {
   const tokenBalance = tokenAwards.reduce((total, token) => total + token.minutes, 0);
   const approvedCount = tokenAwards.length;
   const expiryLabel = minutesRemaining
-    ? `${minutesRemaining} min left before your next token expires.`
+    ? `${minutesRemaining} min left before your next screen time expires.`
     : tokenBalance > 0
-      ? "Your tokens are ready — ask your parent when to use them."
-      : "Finish a mission (+5m) or get an action approved (+15m) to earn tokens.";
+      ? "Your screen time is ready — ask your parent when to use it."
+      : "Finish a mission (+5m) or get an action approved (+15m) to earn screen time.";
 
   // Up Next (do-flow): first incomplete mission in library order.
   const doneCount = KID_MISSIONS.filter((mission) => completions[mission.id]).length;
@@ -91,7 +91,7 @@ export default function KidHomePage() {
         <div className="relative overflow-hidden rounded-[24px] border-4 border-[#0F172A] bg-[#2563EB] p-6 text-white shadow-[0_7px_0_#0F172A] sm:p-8">
           <div className="absolute -right-8 -top-10 h-36 w-36 rounded-full border-4 border-[#0F172A]/15 bg-[#60A5FA]" />
           <div className="relative">
-            <p className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-[#DBEAFE]">Emotional resilience • one small win</p>
+            <p className="mt-4 text-xs font-black uppercase tracking-[0.18em] text-[#DBEAFE]">Emotional resilience • one small win</p>
             <h1 className="max-w-xl text-3xl font-black leading-[0.95] tracking-tight sm:text-5xl">
               Hey, Kai. Ready for one small win?
             </h1>
@@ -117,31 +117,36 @@ export default function KidHomePage() {
         <aside className="rounded-[24px] border-4 border-[#0F172A] bg-white p-6 shadow-[0_7px_0_#0F172A]">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#475569]">Token balance</p>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#475569]">Stars earned</p>
               <h2 className="mt-1 text-3xl font-black tabular-nums">{tokenBalance} min</h2>
             </div>
             <span className="flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-[#0F172A] bg-[#EC4899] text-xl font-black text-white" aria-hidden="true">◉</span>
           </div>
           <div className="mt-5 flex items-end justify-between text-sm font-black">
             <span>{doneCount} of {KID_MISSIONS.length} missions done</span>
-            <span className="text-[#475569]">{approvedCount} {approvedCount === 1 ? "token" : "tokens"}</span>
+            <span className="text-[#475569]">{approvedCount} star{approvedCount === 1 ? "" : "s"}</span>
           </div>
           <div className="mt-2 h-4 overflow-hidden rounded-full border-2 border-[#0F172A] bg-[#F1F5FD]" aria-label={`${doneCount} of ${KID_MISSIONS.length} missions done`}>
             <div className="h-full rounded-full bg-[#EC4899] transition-all" style={{ width: `${Math.round((doneCount / KID_MISSIONS.length) * 100)}%` }} />
           </div>
           <p className="mt-4 text-sm font-bold leading-relaxed text-[#475569]">{expiryLabel}</p>
-          <Link href="/kid/rewards" className="mt-4 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl border-2 border-[#0F172A] bg-[#0F172A] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-[0_3px_0_#0F172A] transition active:translate-y-0.5 active:shadow-none touch-manipulation">My tokens →</Link>
+          <Link href="/kid/rewards" className="mt-4 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl border-2 border-[#0F172A] bg-[#0F172A] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-[0_3px_0_#0F172A] transition active:translate-y-0.5 active:shadow-none touch-manipulation">My stars →</Link>
         </aside>
       </section>
 
       <section>
-        <div className="mb-3 flex items-end justify-between gap-3">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-[#2563EB]">Emotional resilience • choose your next move</p>
             <h2 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">Today&apos;s missions</h2>
             <p className="mt-1 text-xs font-bold text-[#475569] sm:hidden">Swipe to explore →</p>
           </div>
-          <Link href="/kid/missions" className="min-h-[44px] inline-flex items-center rounded-lg px-3 py-2 text-xs font-black uppercase tracking-wider text-[#2563EB] underline underline-offset-4 focus:outline-none focus:ring-2 focus:ring-[#2563EB] touch-manipulation">See all</Link>
+          <Link
+            href="/kid/missions"
+            className="shrink-0 min-h-[36px] inline-flex items-center rounded-xl border-2 border-[#2563EB] px-3 py-1.5 text-xs font-black uppercase tracking-wider text-[#2563EB] hover:bg-[#2563EB]/10 transition focus:outline-none focus:ring-2 focus:ring-[#2563EB] touch-manipulation"
+          >
+            See all missions →
+          </Link>
         </div>
         {/* Mobile: horizontal snap carousel. Desktop: 3-col grid. */}
         <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0">
@@ -153,7 +158,7 @@ export default function KidHomePage() {
                 href={`/kid/missions/${mission.id}`}
                 key={mission.id}
                 aria-label={`${mission.title}${isDone ? " (done)" : isUpNext ? " (up next)" : ""}`}
-                className={`${mission.color} group w-[82%] shrink-0 snap-center rounded-[20px] border-4 p-5 shadow-[0_5px_0_#0F172A] transition hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-[#2563EB]/30 touch-manipulation sm:w-[70%] md:w-auto ${isUpNext && !isDone ? "border-[#0F172A] ring-4 ring-[#F59E0B]/60" : "border-[#0F172A]"}`}
+                className={`${mission.color} group snap-center rounded-[20px] border-4 p-5 shadow-[0_5px_0_#0F172A] transition hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-[#2563EB]/30 touch-manipulation sm:w-[70%] md:w-auto ${isUpNext && !isDone ? "border-[#0F172A] ring-4 ring-[#F59E0B]/60" : "border-[#0F172A]"}`}
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-[#0F172A] bg-white text-xl font-black" aria-hidden="true">{mission.icon}</span>

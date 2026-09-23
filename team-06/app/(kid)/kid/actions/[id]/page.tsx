@@ -44,14 +44,19 @@ export default function KidActionDetailPage() {
 
   return (
     <div className="mx-auto w-full max-w-3xl py-2 sm:py-10">
-      <Link href="/kid" className="inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-xs font-black uppercase tracking-wider text-[#2563EB] underline underline-offset-4 touch-manipulation">← Back to home</Link>
+      <Link href="/kid" className="inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-xs font-black uppercase tracking-wider text-[#2563EB] underline underline-offset-4 touch-manipulation">
+        ← Back to home
+      </Link>
+
       <div className="mt-4 rounded-[24px] border-4 border-[#0F172A] bg-white p-5 shadow-[0_7px_0_#0F172A] sm:p-8">
         <div className="flex flex-col gap-3 border-b-2 border-[#0F172A]/10 pb-5 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-[#2563EB]">Offline action</p>
             <h1 className="mt-2 text-3xl font-black leading-tight sm:text-4xl">{action.name}</h1>
           </div>
-          <span className="w-fit rounded-lg border-2 border-[#0F172A] bg-[#D0E6FD] px-3 py-2 text-[10px] font-black uppercase">{isApproved ? "Approved" : isSubmitted ? "In review" : "Assigned"}</span>
+          <span className="w-fit rounded-lg border-2 border-[#0F172A] bg-[#D0E6FD] px-3 py-2 text-[10px] font-black uppercase">
+            {isApproved ? "Approved ✓" : isSubmitted ? "In review" : "Assigned"}
+          </span>
         </div>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -66,25 +71,66 @@ export default function KidActionDetailPage() {
         </div>
 
         {isApproved ? (
-          <div className="mt-6 rounded-2xl border-2 border-[#0F172A] bg-[#B7E4C7] p-5">
-            <p className="text-sm font-black">Approved — +15 min added to your tokens.</p>
-            <Link href="/kid/rewards" className="mt-3 inline-flex min-h-[48px] items-center justify-center rounded-xl border-2 border-[#0F172A] bg-white px-4 py-2.5 text-xs font-black uppercase tracking-wider shadow-[0_3px_0_#0F172A] touch-manipulation">See my tokens →</Link>
+          /* ── Celebration panel ── */
+          <div className="mt-6 overflow-hidden rounded-2xl border-2 border-[#0F172A] shadow-[0_4px_0_#0F172A]">
+            {/* Dark header with floating emojis */}
+            <div className="flex flex-col items-center gap-2 bg-[#0F172A] px-5 py-6 text-center text-white">
+              <div className="flex gap-3 text-3xl" aria-hidden="true">
+                <span className="kid-float" style={{ animationDelay: "0s" }}>🎉</span>
+                <span className="kid-float" style={{ animationDelay: "0.35s" }}>⭐</span>
+                <span className="kid-float" style={{ animationDelay: "0.7s" }}>🎊</span>
+              </div>
+              <p className="mt-1 text-xs font-black uppercase tracking-[0.18em] text-[#B7E4C7]">
+                Parent approved!
+              </p>
+              <p className="text-2xl font-black sm:text-3xl">+15 min screen time earned</p>
+            </div>
+            {/* Green body */}
+            <div className="flex flex-col gap-3 bg-[#B7E4C7] p-5 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm font-bold leading-relaxed text-[#0F172A]/80">
+                Great work finishing <span className="font-black">{action.name}</span>.
+                Your 15 minutes have been added to your balance — go use them well!
+              </p>
+              <Link
+                href="/kid/rewards"
+                className="shrink-0 inline-flex min-h-[48px] items-center justify-center rounded-xl border-2 border-[#0F172A] bg-white px-4 py-2.5 text-xs font-black uppercase tracking-wider shadow-[0_3px_0_#0F172A] transition hover:-translate-y-0.5 active:translate-y-0 active:shadow-none touch-manipulation"
+              >
+                See my screen time →
+              </Link>
+            </div>
           </div>
         ) : isSubmitted ? (
-          <div className="mt-6 rounded-2xl border-2 border-[#0F172A] bg-[#D0E6FD] p-5 text-sm font-black">Your parent is reviewing this action. You can return home while you wait.</div>
+          <div className="mt-6 rounded-2xl border-2 border-[#0F172A] bg-[#D0E6FD] p-5 text-sm font-black">
+            Your parent is reviewing this action. You can return home while you wait.
+          </div>
         ) : (
           <>
             {action.feedback ? (
               <div className="mt-6 rounded-2xl border-2 border-[#0F172A] bg-[#FDE68A] p-5" aria-live="polite">
                 <p className="text-[10px] font-black uppercase tracking-wider text-[#475569]">Parent says — try again</p>
-                <p className="mt-2 text-sm font-black leading-relaxed">“{action.feedback}”</p>
+                <p className="mt-2 text-sm font-black leading-relaxed">"{action.feedback}"</p>
               </div>
             ) : null}
             <form onSubmit={handleSubmit} className="mt-6 rounded-2xl border-2 border-[#0F172A]/20 bg-[#F8F1E5] p-4 sm:p-5">
-            <label htmlFor="completion-note" className="block text-xs font-black uppercase tracking-wider">What did you notice?</label>
-            <textarea id="completion-note" value={completionNote} onChange={(event) => setCompletionNote(event.target.value)} rows={4} placeholder="Tell your parent how it went (optional)" className="mt-2 min-h-[96px] w-full resize-y rounded-xl border-2 border-[#0F172A]/30 bg-white px-4 py-3 text-base font-bold outline-none focus:border-[#2563EB] focus:ring-4 focus:ring-[#2563EB]/20" style={{ fontSize: "16px" }} />
-            <button type="submit" className="mt-4 min-h-[56px] w-full rounded-xl border-2 border-[#0F172A] bg-[#EC4899] px-4 py-3 text-xs font-black uppercase tracking-wider text-white shadow-[0_3px_0_#0F172A] transition hover:-translate-y-0.5 active:translate-y-0 active:shadow-none focus:outline-none focus:ring-4 focus:ring-[#EC4899]/30 touch-manipulation">{action.feedback ? "Try again — submit for review" : "Submit for parent review"}</button>
-          </form>
+              <label htmlFor="completion-note" className="block text-xs font-black uppercase tracking-wider">
+                What did you notice?
+              </label>
+              <textarea
+                id="completion-note"
+                value={completionNote}
+                onChange={(event) => setCompletionNote(event.target.value)}
+                rows={4}
+                placeholder="Tell your parent how it went (optional)"
+                className="mt-2 min-h-[96px] w-full resize-y rounded-xl border-2 border-[#0F172A]/30 bg-white px-4 py-3 text-base font-bold outline-none focus:border-[#2563EB] focus:ring-4 focus:ring-[#2563EB]/20"
+                style={{ fontSize: "16px" }}
+              />
+              <button
+                type="submit"
+                className="mt-4 min-h-[56px] w-full rounded-xl border-2 border-[#0F172A] bg-[#EC4899] px-4 py-3 text-xs font-black uppercase tracking-wider text-white shadow-[0_3px_0_#0F172A] transition hover:-translate-y-0.5 active:translate-y-0 active:shadow-none focus:outline-none focus:ring-4 focus:ring-[#EC4899]/30 touch-manipulation"
+              >
+                {action.feedback ? "Try again — submit for review" : "Submit for parent review"}
+              </button>
+            </form>
           </>
         )}
       </div>

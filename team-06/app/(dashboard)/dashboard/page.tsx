@@ -20,10 +20,17 @@ import {
 } from "@/lib/challenge-store";
 import { useSyncExternalStore } from "react";
 
+import { type KidChallenge } from "@/lib/challenge-store";
+
 const SERVER_ACTIONS_SNAPSHOT: GrowthAction[] = [];
+const SERVER_CHALLENGES_SNAPSHOT: KidChallenge[] = [];
 
 function getServerActionsSnapshot() {
   return SERVER_ACTIONS_SNAPSHOT;
+}
+
+function getServerChallengesSnapshot() {
+  return SERVER_CHALLENGES_SNAPSHOT;
 }
 
 function SubmittedActionRow({ actionId, name, definitionOfDone, completionNote }: { actionId: string; name: string; definitionOfDone: string; completionNote?: string }) {
@@ -127,7 +134,7 @@ export default function DashboardPage() {
   const submittedChallenges = useSyncExternalStore(
     subscribeToChallenges,
     readChallenges,
-    getServerActionsSnapshot,
+    getServerChallengesSnapshot,
   ).filter((challenge) => challenge.childId === selectedChildId && challenge.progress === "submitted");
 
   return (

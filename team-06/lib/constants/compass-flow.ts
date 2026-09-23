@@ -103,8 +103,12 @@ export const COMPASS_FLOW: Record<string, CompassNode> = {
   },
   "done-cheer": {
     id: "done-cheer",
-    prompt: "You've got this. One small win, then tell someone how it went.",
-    choices: [{ id: "restart", label: "Start over", next: "start" }],
+    prompt: "You did it — that was self-sufficiency in action! One small win changes everything. What do you want to do next?",
+    choices: [
+      { id: "go-missions", label: "Go to my missions ✦", next: "start" },
+      { id: "restart", label: "Talk to Compass again", next: "start" },
+    ],
+    support: "Every brave choice builds a stronger you. Keep going.",
   },
   "done-grownup": {
     id: "done-grownup",
