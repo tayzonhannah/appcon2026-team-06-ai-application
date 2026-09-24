@@ -13,7 +13,7 @@ const NAV_ITEMS = [
 
 const MOBILE_NAV_ITEMS = [
   ...NAV_ITEMS,
-  { href: "/login", label: "Profile", exact: true, idle: "bg-white", icon: "K", avatar: true },
+  { href: "/login", label: "Logout", exact: true, idle: "bg-white", icon: "🚪" },
 ] as const;
 
 function isNavActive(href: string, pathname: string, exact: boolean) {
@@ -59,18 +59,17 @@ export default function KidLayout({
             })}
           </nav>
 
-          {/* Streak chip — same size language as the nav buttons */}
+          {/* Streak chip + Logout button */}
           <div className="flex items-center gap-2">
             <span className="rounded-xl border-2 border-[#0F172A] bg-white px-4 py-2.5 text-xs font-black uppercase tracking-wider shadow-[0_2px_0_#0F172A]" aria-label="7 day streak">
               🔥 7 days
             </span>
-            {/* Desktop profile icon (mobile uses the bottom bar instead) */}
             <Link
               href="/login"
-              aria-label="Open profile"
-              className="hidden h-[42px] w-[42px] items-center justify-center rounded-xl border-2 border-[#0F172A] bg-[#EC4899] text-sm font-black text-white shadow-[0_2px_0_#0F172A] transition hover:-translate-y-0.5 active:translate-y-0 active:shadow-none focus:outline-none focus:ring-4 focus:ring-[#EC4899]/30 touch-manipulation sm:flex"
+              aria-label="Logout"
+              className="hidden min-h-[42px] items-center justify-center rounded-xl border-2 border-[#0F172A] bg-white px-3.5 py-2.5 text-xs font-black uppercase tracking-wider text-[#0F172A] shadow-[0_2px_0_#0F172A] transition hover:bg-[#F1F5FD] hover:-translate-y-0.5 active:translate-y-0 active:shadow-none focus:outline-none focus:ring-4 focus:ring-[#2563EB]/30 touch-manipulation sm:flex"
             >
-              K
+              Logout
             </Link>
           </div>
         </div>
@@ -94,7 +93,7 @@ export default function KidLayout({
                 key={item.href + item.label}
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
-                aria-label={item.label === "Profile" ? "Open profile" : undefined}
+                aria-label={item.label === "Logout" ? "Logout" : undefined}
                 className={`flex min-h-[60px] flex-col items-center justify-center gap-0.5 rounded-2xl border-2 border-[#0F172A] text-[10px] font-black uppercase tracking-wider shadow-[0_3px_0_#0F172A] transition active:translate-y-0.5 active:shadow-none touch-manipulation ${isActive ? "bg-[#0F172A] text-white" : item.idle}`}
               >
                 {isAvatar ? (
