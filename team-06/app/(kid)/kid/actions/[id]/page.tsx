@@ -108,7 +108,9 @@ export default function KidActionDetailPage() {
             {action.feedback ? (
               <div className="mt-6 rounded-2xl border-2 border-[#0F172A] bg-[#FDE68A] p-5" aria-live="polite">
                 <p className="text-[10px] font-black uppercase tracking-wider text-[#475569]">Parent says — try again</p>
-                <p className="mt-2 text-sm font-black leading-relaxed">"{action.feedback}"</p>
+                <p className="mt-2 text-sm font-black leading-relaxed">
+Parent says — try again
+</p>
               </div>
             ) : null}
             <form onSubmit={handleSubmit} className="mt-6 rounded-2xl border-2 border-[#0F172A]/20 bg-[#F8F1E5] p-4 sm:p-5">
