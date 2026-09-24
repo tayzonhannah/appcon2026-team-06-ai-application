@@ -234,8 +234,13 @@ export default function ChatbotPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isBotTyping, setIsBotTyping] = useState(false);
+  const [currentTime, setCurrentTime] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setCurrentTime(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -281,25 +286,16 @@ export default function ChatbotPage() {
     <div className="h-full flex flex-col min-h-[520px]">
 
       {/* ── Page Header ── */}
-      <div className="shrink-0 flex items-center justify-between pb-3 border-b-2 border-[#4A3B2C]/20 mb-0">
-        <div className="flex items-center gap-3">
-          {/* Bot avatar */}
-          <div className="w-10 h-10 rounded-2xl bg-[#162660] border-2 border-[#4A3B2C] shadow-[0_3px_0_#4A3B2C] flex items-center justify-center">
-            <BotIcon className="w-5 h-5 text-[#F1E4D1]" />
-          </div>
-          <div>
-            <h1 className="text-lg font-black text-[#162660] leading-none">Parent Coaching Mascot</h1>
-            <p className="text-[10px] font-bold text-[#162660]/60 uppercase tracking-wider mt-0.5">
-              Recommends resources · Does not give direct advice
-            </p>
-          </div>
+      <div className="shrink-0 flex items-center justify-between pb-3 border-b-2 border-[#4A3B2C]/20 mb-4">
+        <div>
+          <h1 className="text-2xl font-black text-[#162660] tracking-tight">Parent Coaching Mascot</h1>
         </div>
 
         {/* Parent info */}
         <div className="hidden sm:flex flex-col items-end">
           <span className="text-xs font-black text-[#162660]">Parent</span>
           <span className="text-[10px] font-bold text-[#162660]/60">
-            {formatTime(new Date())}, today
+            {currentTime ? `${currentTime}, today` : "Today"}
           </span>
         </div>
       </div>

@@ -50,10 +50,10 @@ export default function LoginPage() {
             </div>
             <div className="flex flex-col">
               <span className="font-extrabold text-2xl tracking-tight text-[#162660] leading-none">
-                KITH
+                KITH.AI
               </span>
               <span className="text-[10px] font-bold tracking-widest text-[#162660]/70 uppercase mt-1">
-                AI-POWERED OFFLINE GROWTH
+                YOUR SMART RESILIENCE-BUILDING SOLUTION
               </span>
             </div>
           </div>

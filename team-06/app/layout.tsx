@@ -9,8 +9,8 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "Kith - Build Emotional Intelligence & Resilience",
-  description: "An AI-assisted, gamified app helping children build emotional intelligence and offline resilience.",
+  title: "Kith.ai - Your Smart Resilience-Building Solution",
+  description: "Kith.ai: Your Smart Resilience-Building Solution helping children build emotional intelligence and offline habits.",
 };
 
 export const viewport: Viewport = {

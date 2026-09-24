@@ -46,10 +46,21 @@ export function ChildDropdown({ childOptions: initialChildren, selected, onSelec
       childId: `kid-linked-${Date.now()}`,
       childName: randomName,
       avatarLetter: randomName[0],
+      avatarColor: "#6B7280",
       challenges: { ongoing: 1, done: 6 },
       actions: { ongoing: 3, done: 12 },
       tokens: { earnedHours: 3.5, usedHours: 1.0, remainingHours: 2.5, totalTokens: 70 },
       minutes: { earnedMinutes: 210, usedMinutes: 60, remainingMinutes: 150, totalMinutes: 70 },
+      profile: {
+        age: 8,
+        grade: "Grade 3",
+        personality: "Curious & Energetic",
+        attentionSpan: "medium",
+        focusAreas: ["Emotional Regulation", "Homework & Academic Focus"],
+        learningStyles: ["Kinesthetic"],
+        screenFreeZones: ["Mealtimes", "1hr Before Bed"],
+        notes: "Newly added child profile.",
+      },
     };
 
     const updatedList = [...childrenList, newChild];
@@ -171,7 +182,9 @@ export function ChildDropdown({ childOptions: initialChildren, selected, onSelec
                             {child.childName}
                           </span>
                           <span className="text-[10px] font-bold text-[#162660]/60 mt-0.5">
-                            {child.minutes.totalMinutes} min · {child.minutes.earnedMinutes} hrs
+                            {child.tokens
+                              ? `${child.tokens.totalTokens} tokens · ${child.tokens.earnedHours} hrs`
+                              : `${child.minutes?.totalMinutes ?? 0} min · ${child.minutes?.earnedMinutes ?? 0} min`}
                           </span>
                         </div>
 
