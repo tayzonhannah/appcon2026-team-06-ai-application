@@ -7,6 +7,23 @@ import { COMPASS_FLOW, nextNode } from "@/lib/constants/compass-flow";
 import { detectEmotionNudge } from "@/lib/constants/emotions";
 import EmotionNudge from "@/components/emotion-nudge";
 
+/** Mini compass buddy for chat bubbles — matches the CompassMascot artwork. */
+function MiniCompass({ size = 32 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 120 120" role="img" aria-label="Compass buddy" className="shrink-0">
+      <circle cx="60" cy="62" r="46" fill="#2563EB" stroke="#0F172A" strokeWidth="6" />
+      <circle cx="60" cy="62" r="30" fill="#FFFFFF" stroke="#0F172A" strokeWidth="4" />
+      <g transform="rotate(24 60 62)">
+        <polygon points="60,40 66,62 60,84 54,62" fill="#EC4899" stroke="#0F172A" strokeWidth="2" strokeLinejoin="round" />
+        <circle cx="60" cy="62" r="5" fill="#F59E0B" stroke="#0F172A" strokeWidth="2" />
+      </g>
+      <circle cx="50" cy="54" r="4.5" fill="#0F172A" />
+      <circle cx="70" cy="54" r="4.5" fill="#0F172A" />
+      <path d="M51 68 Q60 75 69 68" fill="none" stroke="#0F172A" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 interface HistoryEntry {
   compassPrompt: string;
   userChoice?: string;
@@ -21,6 +38,8 @@ export default function KidChatbotPage() {
   const [feeling, setFeeling] = useState("");
   const [nudge, setNudge] = useState<{ emotion: string; message: string } | null>(null);
   const [thinking, setThinking] = useState(false);
+  const [aiReply, setAiReply] = useState<string | null>(null);
+  const [aiThinking, setAiThinking] = useState(false);
 
   const node = COMPASS_FLOW[nodeId] ?? COMPASS_FLOW.start;
 
@@ -107,9 +126,9 @@ export default function KidChatbotPage() {
       <section className="mt-4 rounded-[24px] border-4 border-[#0F172A] bg-white shadow-[0_7px_0_#0F172A]">
         {/* Header */}
         <div className="flex items-start gap-4 border-b-2 border-[#0F172A]/10 p-5 sm:p-7">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-2 border-[#0F172A] bg-[#2563EB] text-2xl font-black text-white shadow-[0_3px_0_#0F172A]">
-            C
-          </div>
+          <span className="shrink-0 overflow-hidden rounded-2xl" aria-hidden="true">
+            <MiniCompass size={60} />
+          </span>
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-[#2563EB]">Your AI companion</p>
             <h1 className="mt-1 text-3xl font-black tracking-tight">Compass</h1>
@@ -130,9 +149,9 @@ export default function KidChatbotPage() {
               <div key={i} className="flex flex-col gap-3">
                 {/* Compass bubble */}
                 <div className="flex items-start gap-3">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border-2 border-[#0F172A] bg-[#2563EB] text-xs font-black text-white">
-                    C
-                  </div>
+                  <span className="shrink-0 overflow-hidden rounded-xl" aria-hidden="true">
+                    <MiniCompass size={32} />
+                  </span>
                   <div className="flex flex-col gap-1">
                     <div
                       className="max-w-[85%] rounded-2xl rounded-tl-sm border-2 border-[#0F172A]/20 bg-[#EFF6FF] px-4 py-3"
@@ -168,9 +187,9 @@ export default function KidChatbotPage() {
           {/* Thinking indicator */}
           {thinking && (
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border-2 border-[#0F172A] bg-[#2563EB] text-xs font-black text-white">
-                C
-              </div>
+              <span className="shrink-0 overflow-hidden rounded-xl" aria-hidden="true">
+                <MiniCompass size={32} />
+              </span>
               <div className="flex items-center gap-1.5 rounded-2xl rounded-tl-sm border-2 border-[#0F172A]/20 bg-[#EFF6FF] px-4 py-3">
                 <span className="h-2 w-2 animate-bounce rounded-full bg-[#2563EB]" style={{ animationDelay: "0ms" }} />
                 <span className="h-2 w-2 animate-bounce rounded-full bg-[#2563EB]" style={{ animationDelay: "150ms" }} />
@@ -248,9 +267,11 @@ export default function KidChatbotPage() {
         </div>
         <form
           className="mt-4"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            const found = detectEmotionNudge(feeling);
+            const text = feeling.trim();
+            if (!text) return;
+            const found = detectEmotionNudge(text);
             setNudge(found);
             if (
               found &&
@@ -263,6 +284,24 @@ export default function KidChatbotPage() {
               } catch {
                 /* demo-safe */
               }
+            }
+            // Live Gemini companion reply (falls back silently to the nudge above).
+            setAiReply(null);
+            setAiThinking(true);
+            try {
+              const res = await fetch("/api/companion", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: text }),
+              });
+              const data = await res.json();
+              if (data && !data.fallback && data.reply) {
+                setAiReply(String(data.reply));
+              }
+            } catch {
+              /* nudge already shown — stay silent */
+            } finally {
+              setAiThinking(false);
             }
           }}
         >
@@ -277,12 +316,32 @@ export default function KidChatbotPage() {
             />
             <button
               type="submit"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-xl border-2 border-[#0F172A] bg-[#2563EB] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-[0_3px_0_#0F172A] transition hover:-translate-y-0.5 active:translate-y-0 active:shadow-none touch-manipulation"
+              disabled={aiThinking}
+              className="inline-flex min-h-[48px] items-center justify-center rounded-xl border-2 border-[#0F172A] bg-[#2563EB] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-[0_3px_0_#0F172A] transition hover:-translate-y-0.5 active:translate-y-0 active:shadow-none disabled:opacity-60 touch-manipulation"
             >
-              Check in
+              {aiThinking ? "Listening…" : "Check in"}
             </button>
           </div>
         </form>
+        {aiThinking ? (
+          <div className="mt-3 flex items-center gap-3" aria-live="polite">
+            <span className="shrink-0 overflow-hidden rounded-xl" aria-hidden="true">
+              <MiniCompass size={32} />
+            </span>
+            <p className="text-sm font-bold text-[#475569]">Compass is thinking…</p>
+          </div>
+        ) : null}
+        {aiReply ? (
+          <div className="mt-3 flex items-start gap-3" aria-live="polite">
+            <span className="shrink-0 overflow-hidden rounded-xl" aria-hidden="true">
+              <MiniCompass size={36} />
+            </span>
+            <div className="rounded-2xl rounded-tl-sm border-2 border-[#0F172A]/20 bg-[#EFF6FF] px-4 py-3">
+              <p className="text-[10px] font-black uppercase tracking-wider text-[#2563EB]">✦ Compass AI</p>
+              <p className="mt-1 text-[15px] font-black leading-relaxed text-[#0F172A]">{aiReply}</p>
+            </div>
+          </div>
+        ) : null}
       </section>
 
       {/* Escalation note */}

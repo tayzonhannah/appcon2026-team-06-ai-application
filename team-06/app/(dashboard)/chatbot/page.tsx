@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { saveGrowthAction } from "@/lib/growth-store";
+import { MOCK_CHILDREN_LIST } from "@/lib/constants/analytics";
+import { PROFILE_DATA_KEY } from "@/lib/constants/profile";
 
 /* ─── Types ───────────────────────────────────────────── */
 type ResourceType = "book" | "strategy" | "activity" | "article";
@@ -11,12 +14,20 @@ interface Resource {
   description: string;
 }
 
+interface ActionSuggestion {
+  name: string;
+  description: string;
+  definitionOfDone: string;
+}
+
 interface Message {
   id: string;
   role: "user" | "bot";
   content: string;
   timestamp: Date;
   resources?: Resource[];
+  suggestions?: ActionSuggestion[];
+  aiPowered?: boolean;
 }
 
 /* ─── Pre-built prompt chips ──────────────────────────── */
@@ -234,6 +245,7 @@ export default function ChatbotPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isBotTyping, setIsBotTyping] = useState(false);
+  const [addedSuggestions, setAddedSuggestions] = useState<Record<string, boolean>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -241,7 +253,46 @@ export default function ChatbotPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isBotTyping]);
 
-  function handleSend(text: string = inputValue) {
+  function staticFallback(trimmed: string) {
+    // Match to a prompt index or fallback to index 0
+    const matchIndex = SUGGESTED_PROMPTS.findIndex((p) =>
+      p.toLowerCase() === trimmed.toLowerCase()
+    );
+    const responseData = RESPONSES[matchIndex >= 0 ? matchIndex : 0];
+    const botMsg: Message = {
+      id: (Date.now() + 1).toString(),
+      role: "bot",
+      content: responseData.intro,
+      timestamp: new Date(),
+      resources: responseData.resources,
+    };
+    setMessages((prev) => [...prev, botMsg]);
+    setIsBotTyping(false);
+  }
+
+  function buildAiContext() {
+    try {
+      const profile = JSON.parse(window.localStorage.getItem(PROFILE_DATA_KEY) ?? "null");
+      const actions = JSON.parse(window.localStorage.getItem("conscious-future-growth-actions") ?? "[]");
+      const missions = JSON.parse(window.localStorage.getItem("conscious-future-mission-completions") ?? "{}");
+      const tokens = JSON.parse(window.localStorage.getItem("conscious-future-growth-tokens") ?? "[]");
+      const counts = (Array.isArray(actions) ? actions : []).reduce<Record<string, number>>((acc, a) => {
+        acc[a.progress] = (acc[a.progress] ?? 0) + 1;
+        return acc;
+      }, {});
+      return {
+        child: MOCK_CHILDREN_LIST[0].childName,
+        profile,
+        actionsByProgress: counts,
+        missionsDone: Object.keys(missions ?? {}).length,
+        tokenMinutes: (Array.isArray(tokens) ? tokens : []).reduce((t: number, x) => t + (x.minutes ?? 0), 0),
+      };
+    } catch {
+      return { child: MOCK_CHILDREN_LIST[0].childName };
+    }
+  }
+
+  async function handleSend(text: string = inputValue) {
     const trimmed = text.trim();
     if (!trimmed || isBotTyping) return;
 
@@ -256,23 +307,45 @@ export default function ChatbotPage() {
     setInputValue("");
     setIsBotTyping(true);
 
-    // Match to a prompt index or fallback to index 0
-    const matchIndex = SUGGESTED_PROMPTS.findIndex((p) =>
-      p.toLowerCase() === trimmed.toLowerCase()
-    );
-    const responseData = RESPONSES[matchIndex >= 0 ? matchIndex : 0];
+    // Try live Gemini coach first; fall back to static resources on any failure.
+    try {
+      const res = await fetch("/api/coach", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: trimmed, ...buildAiContext() }),
+      });
+      const data = await res.json();
+      if (data && !data.fallback && data.reply) {
+        const botMsg: Message = {
+          id: (Date.now() + 1).toString(),
+          role: "bot",
+          content: data.reply,
+          timestamp: new Date(),
+          suggestions: Array.isArray(data.suggestedActions) ? data.suggestedActions : [],
+          aiPowered: true,
+        };
+        setMessages((prev) => [...prev, botMsg]);
+        setIsBotTyping(false);
+        return;
+      }
+    } catch {
+      // fall through to static resources
+    }
+    setTimeout(() => staticFallback(trimmed), 600);
+  }
 
-    setTimeout(() => {
-      const botMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        role: "bot",
-        content: responseData.intro,
-        timestamp: new Date(),
-        resources: responseData.resources,
-      };
-      setMessages((prev) => [...prev, botMsg]);
-      setIsBotTyping(false);
-    }, 1200);
+  function acceptSuggestion(msgId: string, suggestion: ActionSuggestion) {
+    saveGrowthAction({
+      id: `action-${Date.now()}`,
+      childId: MOCK_CHILDREN_LIST[0].childId,
+      name: suggestion.name,
+      description: suggestion.description,
+      definitionOfDone: suggestion.definitionOfDone,
+      status: "active",
+      progress: "assigned",
+      createdAt: new Date().toISOString(),
+    });
+    setAddedSuggestions((prev) => ({ ...prev, [`${msgId}-${suggestion.name}`]: true }));
   }
 
   const isEmpty = messages.length === 0;
@@ -290,7 +363,7 @@ export default function ChatbotPage() {
           <div>
             <h1 className="text-lg font-black text-[#162660] leading-none">Parent Coaching Mascot</h1>
             <p className="text-[10px] font-bold text-[#162660]/60 uppercase tracking-wider mt-0.5">
-              Recommends resources · Does not give direct advice
+              AI coach · Suggests actions · Falls back offline
             </p>
           </div>
         </div>
@@ -341,6 +414,11 @@ export default function ChatbotPage() {
                   : "bg-white text-[#162660] border-[#4A3B2C] shadow-[0_3px_0_#4A3B2C] rounded-tl-sm"
                 }`}>
                 {msg.content}
+                {msg.role === "bot" && msg.aiPowered ? (
+                  <span className="mt-1.5 inline-block rounded-full bg-[#D0E6FD] border border-[#162660]/30 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-[#162660]">
+                    ✦ AI coach
+                  </span>
+                ) : null}
               </div>
 
               {/* Resource cards (bot only) */}
@@ -363,6 +441,34 @@ export default function ChatbotPage() {
                       </p>
                     </div>
                   ))}
+                </div>
+              )}
+
+              {/* Suggested offline actions (AI, bot only) */}
+              {msg.suggestions && msg.suggestions.length > 0 && (
+                <div className="flex flex-col gap-2 w-full">
+                  {msg.suggestions.map((sug) => {
+                    const key = `${msg.id}-${sug.name}`;
+                    const added = addedSuggestions[key];
+                    return (
+                      <div key={key} className="rounded-xl border-2 border-[#162660] bg-[#D0E6FD] p-3">
+                        <p className="text-[10px] font-black uppercase tracking-wider text-[#162660]/70">
+                          Suggested action for {MOCK_CHILDREN_LIST[0].childName}
+                        </p>
+                        <p className="mt-1 text-xs font-black leading-tight">{sug.name}</p>
+                        <p className="mt-1 text-[11px] font-bold opacity-80 leading-relaxed">{sug.description}</p>
+                        <p className="mt-1 text-[11px] font-bold leading-relaxed">Done when: {sug.definitionOfDone}</p>
+                        <button
+                          type="button"
+                          disabled={added}
+                          onClick={() => acceptSuggestion(msg.id, sug)}
+                          className="mt-2 w-full rounded-lg border-2 border-[#162660] bg-[#B7E4C7] px-3 py-2 text-[10px] font-black uppercase text-[#162660] shadow-[0_2px_0_#162660] transition hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0"
+                        >
+                          {added ? "Added ✓ — see Actions" : "Add this action"}
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
 
@@ -438,7 +544,7 @@ export default function ChatbotPage() {
           </button>
         </form>
         <p className="text-[9px] font-bold text-[#162660]/40 text-center mt-1.5">
-          This mascot recommends resources only · Not a substitute for professional advice
+          AI coach — review suggestions before assigning · Not a substitute for professional advice
         </p>
       </div>
 
