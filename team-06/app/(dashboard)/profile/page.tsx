@@ -5,6 +5,7 @@ import { useSyncExternalStore } from "react";
 import { DEFAULT_PROFILE_TRAITS, PROFILE_DATA_KEY, ProfileTrait } from "@/lib/constants/profile";
 
 const readSavedTraits = (): ProfileTrait[] => {
+  if (typeof window === "undefined") return DEFAULT_PROFILE_TRAITS;
   const savedProfile = localStorage.getItem(PROFILE_DATA_KEY);
   if (!savedProfile) return DEFAULT_PROFILE_TRAITS;
 

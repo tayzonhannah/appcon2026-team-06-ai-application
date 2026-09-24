@@ -135,7 +135,7 @@ export default function ChallengePage() {
                   <p className="mt-1 text-sm font-bold text-[#162660]">{activeAction.definitionOfDone}</p>
                 </div>
                 <div className="mt-4 rounded-xl border-2 border-[#162660] bg-[#B7E4C7] p-3 text-sm font-black text-[#162660]" aria-live="polite">
-                  Assigned to Kai — now visible on kid home under Offline actions.
+                  Assigned to Leo — now visible on kid home under Offline actions.
                 </div>
                 <a href="/dashboard" className="mt-3 inline-flex min-h-[44px] items-center justify-center rounded-xl border-2 border-[#162660] bg-white px-4 py-2.5 text-xs font-black uppercase tracking-wider text-[#162660] shadow-[0_2px_0_#162660]">Review in Parent Overview →</a>
               </div>
@@ -217,7 +217,7 @@ export default function ChallengePage() {
                 </ol>
               </div>
               <div className="mt-4 rounded-xl border-2 border-[#162660] bg-[#B7E4C7] p-3 text-sm font-black text-[#162660]" aria-live="polite">
-                Assigned to Kai — visible under Kid Challenges. Approval earns +{activeChallenge.minutes} min.
+                Assigned to Leo — visible under Kid Challenges. Approval earns +{activeChallenge.minutes} min.
               </div>
             </div>
           ) : (

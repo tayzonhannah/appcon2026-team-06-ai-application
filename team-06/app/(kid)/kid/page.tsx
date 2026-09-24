@@ -93,7 +93,7 @@ export default function KidHomePage() {
           <div className="relative">
             <p className="mt-4 text-xs font-black uppercase tracking-[0.18em] text-[#DBEAFE]">Emotional resilience • one small win</p>
             <h1 className="max-w-xl text-3xl font-black leading-[0.95] tracking-tight sm:text-5xl">
-              Hey, Kai. Ready for one small win?
+              Hey, Leo. Ready for one small win?
             </h1>
             <p className="mt-4 max-w-lg text-base font-bold leading-relaxed text-[#EFF6FF]">
               {allMissionsDone
