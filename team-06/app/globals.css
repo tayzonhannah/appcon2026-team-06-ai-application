@@ -25,6 +25,16 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+/* Kid mobile: smooth snap scrolling + no accidental text selection on tap targets */
+.kid-no-scrollbar {
+  scrollbar-width: none;
+}
+.kid-no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* Aralkada-style Claymorphism utilities */
@@ -174,6 +184,39 @@ input[type="number"] {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+/* Kids background: gentle float / drift / twinkle */
+@keyframes kidFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+@keyframes kidDrift {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(24px); }
+  100% { transform: translateX(0); }
+}
+@keyframes kidTwinkle {
+  0%, 100% { opacity: 0.35; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.kid-float {
+  animation: kidFloat 4s ease-in-out infinite;
+}
+.kid-cloud {
+  animation: kidDrift 9s ease-in-out infinite;
+}
+.kid-twinkle {
+  animation: kidTwinkle 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kid-float,
+  .kid-cloud,
+  .kid-twinkle {
+    animation: none;
   }
 }
 

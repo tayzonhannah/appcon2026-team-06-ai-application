@@ -39,7 +39,7 @@ export default function ChallengePage() {
         {/* Child Selector Dropdown */}
         {activeChild && (
           <ChildDropdown
-            children={children}
+            childOptions={children}
             selected={activeChild}
             onSelect={(child) => setSelectedChildId(child.childId)}
           />

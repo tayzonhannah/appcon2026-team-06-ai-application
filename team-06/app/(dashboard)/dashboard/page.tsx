@@ -1,9 +1,192 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { ChildDropdown } from "@/components/child-dropdown";
 import { useChildProfiles, getAgeCap } from "@/lib/hooks/useChildProfiles";
+import {
+  approveGrowthAction,
+  readGrowthActions,
+  rejectGrowthAction,
+  subscribeToGrowthActions,
+  type GrowthAction,
+} from "@/lib/growth-store";
+import {
+  approveChallenge,
+  readChallenges,
+  rejectChallenge,
+  subscribeToChallenges,
+  type KidChallenge,
+} from "@/lib/challenge-store";
+
+const SERVER_ACTIONS_SNAPSHOT: GrowthAction[] = [];
+const SERVER_CHALLENGES_SNAPSHOT: KidChallenge[] = [];
+
+function getServerActionsSnapshot() {
+  return SERVER_ACTIONS_SNAPSHOT;
+}
+
+function getServerChallengesSnapshot() {
+  return SERVER_CHALLENGES_SNAPSHOT;
+}
+
+function SubmittedActionRow({
+  actionId,
+  name,
+  definitionOfDone,
+  completionNote,
+}: {
+  actionId: string;
+  name: string;
+  definitionOfDone: string;
+  completionNote?: string;
+}) {
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedback, setFeedback] = useState("");
+
+  return (
+    <div className="flex flex-col gap-3 rounded-xl border-2 border-[#4A3B2C]/25 bg-[#F8F1E5] p-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h3 className="font-black text-[#162660]">{name}</h3>
+          <p className="mt-1 text-xs font-bold text-[#162660]/65">{definitionOfDone}</p>
+          {completionNote ? (
+            <p className="mt-2 rounded-lg border border-[#4A3B2C]/20 bg-white p-2 text-xs font-bold text-[#162660]">
+              Kid: &ldquo;{completionNote}&rdquo;
+            </p>
+          ) : null}
+        </div>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => setShowFeedback((v) => !v)}
+            className="rounded-lg border-2 border-[#4A3B2C] bg-white px-3 py-2 text-[10px] font-black uppercase text-[#162660] transition hover:bg-[#F1E4D1]"
+          >
+            Needs work
+          </button>
+          <button
+            type="button"
+            onClick={() => approveGrowthAction(actionId)}
+            className="rounded-lg border-2 border-[#162660] bg-[#B7E4C7] px-3 py-2 text-[10px] font-black uppercase text-[#162660] shadow-[0_2px_0_#162660] transition hover:-translate-y-0.5"
+          >
+            Approve +15m
+          </button>
+        </div>
+      </div>
+      {showFeedback ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            rejectGrowthAction(actionId, feedback || "Try one more time — almost there.");
+            setShowFeedback(false);
+            setFeedback("");
+          }}
+          className="flex flex-col gap-2 rounded-lg border-2 border-[#4A3B2C]/20 bg-white p-2.5"
+        >
+          <label
+            htmlFor={`feedback-${actionId}`}
+            className="text-[10px] font-black uppercase tracking-wider text-[#162660]/60"
+          >
+            What should the kid try again?
+          </label>
+          <input
+            id={`feedback-${actionId}`}
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+            placeholder="e.g. Add one more calm minute and tell me how it felt"
+            className="w-full rounded-lg border-2 border-[#4A3B2C]/30 px-3 py-2 text-xs font-bold outline-none focus:border-[#162660]"
+          />
+          <button
+            type="submit"
+            className="rounded-lg border-2 border-[#4A3B2C] bg-[#F1E4D1] px-3 py-2 text-[10px] font-black uppercase text-[#162660]"
+          >
+            Send back to kid
+          </button>
+        </form>
+      ) : null}
+    </div>
+  );
+}
+
+function SubmittedChallengeRow({
+  challengeId,
+  title,
+  minutes,
+  report,
+}: {
+  challengeId: string;
+  title: string;
+  minutes: number;
+  report?: string;
+}) {
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedback, setFeedback] = useState("");
+
+  return (
+    <div className="flex flex-col gap-3 rounded-xl border-2 border-[#4A3B2C]/25 bg-[#F8F1E5] p-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h3 className="font-black text-[#162660]">{title}</h3>
+          <p className="mt-1 text-xs font-bold text-[#162660]/65">
+            Self-paced challenge • +{minutes} min on approval
+          </p>
+          {report ? (
+            <p className="mt-2 rounded-lg border border-[#4A3B2C]/20 bg-white p-2 text-xs font-bold text-[#162660]">
+              Kid report: &ldquo;{report}&rdquo;
+            </p>
+          ) : null}
+        </div>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => setShowFeedback((v) => !v)}
+            className="rounded-lg border-2 border-[#4A3B2C] bg-white px-3 py-2 text-[10px] font-black uppercase text-[#162660] transition hover:bg-[#F1E4D1]"
+          >
+            Needs work
+          </button>
+          <button
+            type="button"
+            onClick={() => approveChallenge(challengeId)}
+            className="rounded-lg border-2 border-[#162660] bg-[#B7E4C7] px-3 py-2 text-[10px] font-black uppercase text-[#162660] shadow-[0_2px_0_#162660] transition hover:-translate-y-0.5"
+          >
+            Approve +{minutes}m
+          </button>
+        </div>
+      </div>
+      {showFeedback ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            rejectChallenge(challengeId, feedback || "Add one more detail and resend your report.");
+            setShowFeedback(false);
+            setFeedback("");
+          }}
+          className="flex flex-col gap-2 rounded-lg border-2 border-[#4A3B2C]/20 bg-white p-2.5"
+        >
+          <label
+            htmlFor={`challenge-feedback-${challengeId}`}
+            className="text-[10px] font-black uppercase tracking-wider text-[#162660]/60"
+          >
+            What should the kid add?
+          </label>
+          <input
+            id={`challenge-feedback-${challengeId}`}
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+            placeholder="e.g. Tell me which milestone was hardest"
+            className="w-full rounded-lg border-2 border-[#4A3B2C]/30 px-3 py-2 text-xs font-bold outline-none focus:border-[#162660]"
+          />
+          <button
+            type="submit"
+            className="rounded-lg border-2 border-[#4A3B2C] bg-[#F1E4D1] px-3 py-2 text-[10px] font-black uppercase text-[#162660]"
+          >
+            Send back to kid
+          </button>
+        </form>
+      ) : null}
+    </div>
+  );
+}
 
 export default function DashboardPage() {
   const { children } = useChildProfiles();
@@ -20,6 +203,18 @@ export default function DashboardPage() {
       )
     : 0;
 
+  const submittedActions = useSyncExternalStore(
+    subscribeToGrowthActions,
+    readGrowthActions,
+    getServerActionsSnapshot,
+  ).filter((action) => action.childId === (activeChild?.childId || selectedChildId) && action.progress === "submitted");
+
+  const submittedChallenges = useSyncExternalStore(
+    subscribeToChallenges,
+    readChallenges,
+    getServerChallengesSnapshot,
+  ).filter((challenge) => challenge.childId === (activeChild?.childId || selectedChildId) && challenge.progress === "submitted");
+
   return (
     <div className="flex flex-col gap-4 my-auto">
       {/* ── Page Header: Image 1 Style ── */}
@@ -32,7 +227,7 @@ export default function DashboardPage() {
 
         {activeChild && (
           <ChildDropdown
-            children={children}
+            childOptions={children}
             selected={activeChild}
             onSelect={(child) => setSelectedChildId(child.childId)}
           />
@@ -41,7 +236,7 @@ export default function DashboardPage() {
 
       {/* ── Bento Box Grid Layout ── */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-stretch">
-        
+
         {/* ── BENTO TILE 1: Child Growth & Focus Areas (lg:col-span-7) ── */}
         <div className="lg:col-span-7 aralkada-card p-5 flex flex-col justify-between gap-4">
           <div>
@@ -76,11 +271,10 @@ export default function DashboardPage() {
                   {activeChild.profile.focusAreas.slice(0, 3).map((area, idx) => (
                     <span
                       key={area}
-                      className={`text-[9px] font-black border-2 rounded-full px-2.5 py-0.5 uppercase tracking-wide ${
-                        idx % 2 === 0
+                      className={`text-[9px] font-black border-2 rounded-full px-2.5 py-0.5 uppercase tracking-wide ${idx % 2 === 0
                           ? "bg-[#D0E6FD] text-[#162660] border-[#162660]"
                           : "bg-[#E8DAC4] text-[#162660] border-[#4A3B2C]"
-                      }`}
+                        }`}
                     >
                       {area}
                     </span>
@@ -259,6 +453,44 @@ export default function DashboardPage() {
         </div>
 
       </div>
+
+      <section className="aralkada-card p-4">
+        <div className="flex items-center justify-between gap-3 border-b border-[#4A3B2C]/15 pb-3">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-wider text-[#162660]/60">Parent review</p>
+            <h2 className="mt-1 text-lg font-black text-[#162660]">Submitted actions</h2>
+          </div>
+          <span className="rounded-full border-2 border-[#4A3B2C] bg-[#D0E6FD] px-2.5 py-1 text-[10px] font-black uppercase text-[#162660]">{submittedActions.length} pending</span>
+        </div>
+        {submittedActions.length === 0 ? (
+          <p className="pt-4 text-sm font-bold text-[#162660]/65">Completed child actions will appear here for verification.</p>
+        ) : (
+          <div className="mt-3 flex flex-col gap-3">
+            {submittedActions.map((action) => (
+              <SubmittedActionRow key={action.id} actionId={action.id} name={action.name} definitionOfDone={action.definitionOfDone} completionNote={action.completionNote} />
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section className="aralkada-card p-4">
+        <div className="flex items-center justify-between gap-3 border-b border-[#4A3B2C]/15 pb-3">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-wider text-[#162660]/60">Parent review</p>
+            <h2 className="mt-1 text-lg font-black text-[#162660]">Submitted challenges</h2>
+          </div>
+          <span className="rounded-full border-2 border-[#4A3B2C] bg-[#D0E6FD] px-2.5 py-1 text-[10px] font-black uppercase text-[#162660]">{submittedChallenges.length} pending</span>
+        </div>
+        {submittedChallenges.length === 0 ? (
+          <p className="pt-4 text-sm font-bold text-[#162660]/65">Kid challenge reports will appear here with milestones and feedback tools.</p>
+        ) : (
+          <div className="mt-3 flex flex-col gap-3">
+            {submittedChallenges.map((challenge) => (
+              <SubmittedChallengeRow key={challenge.id} challengeId={challenge.id} title={challenge.title} minutes={challenge.minutes} report={challenge.report} />
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }

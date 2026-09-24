@@ -4,24 +4,19 @@ import { useState, useRef, useEffect } from "react";
 import { ChildAnalytics } from "@/lib/constants/analytics";
 
 interface ChildDropdownProps {
-  children: ChildAnalytics[];
+  childOptions: ChildAnalytics[];
   selected: ChildAnalytics;
   onSelect: (child: ChildAnalytics) => void;
   onAddChild?: (newChild: ChildAnalytics) => void;
 }
 
-export function ChildDropdown({ children: initialChildren, selected, onSelect, onAddChild }: ChildDropdownProps) {
+export function ChildDropdown({ childOptions: initialChildren, selected, onSelect, onAddChild }: ChildDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [childrenList, setChildrenList] = useState<ChildAnalytics[]>(initialChildren);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [linkCode, setLinkCode] = useState("");
   const [linkError, setLinkError] = useState("");
   const ref = useRef<HTMLDivElement>(null);
-
-  /* Keep childrenList updated if props change */
-  useEffect(() => {
-    setChildrenList(initialChildren);
-  }, [initialChildren]);
 
   /* Close dropdown on outside click */
   useEffect(() => {
@@ -55,6 +50,7 @@ export function ChildDropdown({ children: initialChildren, selected, onSelect, o
       challenges: { ongoing: 1, done: 6 },
       actions: { ongoing: 3, done: 12 },
       tokens: { earnedHours: 3.5, usedHours: 1.0, remainingHours: 2.5, totalTokens: 70 },
+      minutes: { earnedMinutes: 210, usedMinutes: 60, remainingMinutes: 150, totalMinutes: 70 },
       profile: {
         age: 8,
         grade: "Grade 3",
@@ -180,15 +176,17 @@ export function ChildDropdown({ children: initialChildren, selected, onSelect, o
                         {child.avatarLetter}
                       </span>
 
-                      {/* Name + quick stat */}
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-sm font-black text-[#162660] leading-none">
-                          {child.childName}
-                        </span>
-                        <span className="text-[10px] font-bold text-[#162660]/60 mt-0.5">
-                          {child.tokens.totalTokens} tokens · {child.tokens.earnedHours} hrs
-                        </span>
-                      </div>
+{/* Name + quick stat */}
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-sm font-black text-[#162660] leading-none">
+                            {child.childName}
+                          </span>
+                          <span className="text-[10px] font-bold text-[#162660]/60 mt-0.5">
+                            {child.tokens
+                              ? `${child.tokens.totalTokens} tokens · ${child.tokens.earnedHours} hrs`
+                              : `${child.minutes?.totalMinutes ?? 0} min · ${child.minutes?.earnedMinutes ?? 0} min`}
+                          </span>
+                        </div>
 
                       {/* Check mark for selected */}
                       {isSelected && (

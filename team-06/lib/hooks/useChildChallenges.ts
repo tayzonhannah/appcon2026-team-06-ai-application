@@ -7,6 +7,8 @@ import {
   INITIAL_CHALLENGES,
   INITIAL_ACTIONS,
 } from "@/lib/constants/challenges";
+import { saveChallenge } from "@/lib/challenge-store";
+import { saveGrowthAction } from "@/lib/growth-store";
 
 const CHALLENGES_KEY = "kith_child_challenges_v2";
 const ACTIONS_KEY = "kith_child_actions_v2";
@@ -54,6 +56,18 @@ export function useChildChallenges(childId: string) {
       };
       const next = [newChallenge, ...prev];
       saveToStorage(CHALLENGES_KEY, next);
+      saveChallenge({
+        id: newChallenge.id,
+        childId: newChallenge.childId,
+        title: newChallenge.title,
+        description: newChallenge.description,
+        milestones: newChallenge.milestones,
+        timeline: "1 week",
+        minutes: newChallenge.earnedMinutes,
+        status: "active",
+        progress: "assigned",
+        createdAt: new Date().toISOString(),
+      });
       return next;
     });
   }, []);
@@ -78,6 +92,16 @@ export function useChildChallenges(childId: string) {
       };
       const next = [newAction, ...prev];
       saveToStorage(ACTIONS_KEY, next);
+      saveGrowthAction({
+        id: newAction.id,
+        childId: newAction.childId,
+        name: newAction.title,
+        description: newAction.title,
+        definitionOfDone: newAction.title,
+        status: "active",
+        progress: "assigned",
+        createdAt: new Date().toISOString(),
+      });
       return next;
     });
   }, []);
