@@ -1,4 +1,4 @@
-# Conscious Future — AI Parenting & Growth Platform (Team 06)
+# Kith — Intelligent Resilience-Building Companion (Team 06)
 
 A modern, empathetic web application designed to help parents build healthy digital habits with their children, featuring dynamic growth tracking, parent reflection tools, kid mission challenges, live Supabase database backend, and Gemini AI integration.
 
@@ -93,6 +93,6 @@ When deploying this repository to Vercel:
 
 ## 🤖 Gemini AI Features
 
-- **Parenting Assistant (`/(dashboard)/chatbot`)**: Real-time AI parenting strategies and resource recommendations.
-- **Kid Compass Buddy (`/(kid)/kid/chatbot`)**: Empathetic AI conversation partner for kids to process emotions.
-- **Parent Reflection Synthesis (`/(dashboard)/assessment`)**: Dynamic AI evaluation of parenting styles.
+- Parenting Assistant (`/(dashboard)/chatbot`): Real-time AI parenting strategies and resource recommendations.
+- Kid Compass Buddy (`/(kid)/kid/chatbot`): Empathetic AI conversation partner for kids to process emotions.
+- Parent Reflection Synthesis (`/(dashboard)/assessment`): Dynamic AI evaluation of parenting styles.
