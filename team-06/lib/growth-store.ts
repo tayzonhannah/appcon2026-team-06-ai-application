@@ -124,20 +124,33 @@ export function rejectGrowthAction(actionId: string, feedback = "") {
   window.dispatchEvent(new Event(GROWTH_ACTIONS_EVENT));
 }
 
+let cachedTokensRaw: string | null = null;
+let cachedAllTokens: TokenAward[] = [];
+
 export function readTokenAwards(): TokenAward[] {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return cachedAllTokens;
   const savedTokens = window.localStorage.getItem(GROWTH_TOKENS_KEY);
-  if (!savedTokens) return [];
+  if (savedTokens === cachedTokensRaw) return cachedAllTokens;
+  if (!savedTokens) {
+    cachedTokensRaw = null;
+    cachedAllTokens = [];
+    return cachedAllTokens;
+  }
   try {
-    return JSON.parse(savedTokens) as TokenAward[];
+    cachedTokensRaw = savedTokens;
+    cachedAllTokens = JSON.parse(savedTokens) as TokenAward[];
+    return cachedAllTokens;
   } catch {
-    return [];
+    cachedTokensRaw = savedTokens;
+    cachedAllTokens = [];
+    return cachedAllTokens;
   }
 }
 
 export function readAvailableTokens(childId: string) {
+  if (typeof window === "undefined") return cachedAvailableTokens;
   const nowMinute = Math.floor(Date.now() / 60000);
-  const rawTokens = typeof window === "undefined" ? "" : window.localStorage.getItem(GROWTH_TOKENS_KEY) ?? "";
+  const rawTokens = window.localStorage.getItem(GROWTH_TOKENS_KEY) ?? "";
   const cacheKey = `${childId}:${nowMinute}:${rawTokens}`;
   if (cacheKey === cachedTokensKey) return cachedAvailableTokens;
 
